@@ -6,11 +6,16 @@ public class Character : MonoBehaviour
 {
 
     private Rigidbody2D rb;
+    [SerializeField]
+    private GameObject bombPrefab;
+
     
     [SerializeField]
-    private float speed=10f,anglularSpeed=10f;
+    private float speed=10f,anglularSpeed=10f,bombPlacingCooldown=  6;
     [SerializeField]
     private int hp = 1;
+
+    private bool isBombOnCooldown = false;
 
     Vector2 movementDirection = Vector2.zero;
     Vector2 placeToLookAt = Vector2.zero;
@@ -29,6 +34,19 @@ public class Character : MonoBehaviour
         if (hp <= 0){
             Destroy(gameObject);
         }
+    }
+
+    IEnumerator ManageBombCooldown(){
+        isBombOnCooldown = true;
+        yield return new WaitForSeconds(bombPlacingCooldown);
+        isBombOnCooldown = false;
+    }
+
+    public void PlaceBomb(){
+        if (isBombOnCooldown)
+            return;
+        StartCoroutine(ManageBombCooldown());
+        Instantiate(bombPrefab,transform.position,Quaternion.identity);
     }
 
     public void SetMovement(Vector2 dir){

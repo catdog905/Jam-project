@@ -25,5 +25,9 @@ public class Player : MonoBehaviour
         worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
         character.SetPlaceToLookAt(worldPosition);
         
+        if (Input.GetKeyDown(KeyCode.Space)){
+            character.PlaceBomb();
+        }
+
     }
 }

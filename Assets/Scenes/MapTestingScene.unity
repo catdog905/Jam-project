@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minNumSide: 50
   mapSideLength: 600
-  roomType: {fileID: 7318525651468920874, guid: d087732a5f0da41b4bc8c06ea70c9a9f, type: 3}
+  wall: {fileID: 7318525651468920874, guid: d087732a5f0da41b4bc8c06ea70c9a9f, type: 3}
 --- !u!4 &235912275
 Transform:
   m_ObjectHideFlags: 0
