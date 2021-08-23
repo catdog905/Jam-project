@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class CircleMap : MonoBehaviour
 {
-    private Vector2 topVertex = new Vector2();
-    private Vector2 leftBottomVertex = new Vector2();
-    private Vector2 rightBottomVertex = new Vector2();
     private static System.Random rnd = new System.Random(); 
  
     public int minNumSide = 50;
     public int mapSideLength = 600;
+    public GameObject roomType;
 
     // Start is called before the first frame update
     void Start()
     {
         BoxesTree boxesTree = GenerateBinaryBoxesTree(new Box(new Vector2(0, 0), mapSideLength, mapSideLength));
         List<Box> allBoxLeafs = boxesTree.GetAllBoxLeafs();
-
+        foreach (Box box in allBoxLeafs) {
+            Instantiate(roomType, new Vector2(box.leftTopPos.x + box.width/2, box.leftTopPos.y + box.height/2), Quaternion.identity);
+        }
     }
 
     // Update is called once per frame
@@ -37,10 +37,10 @@ public class CircleMap : MonoBehaviour
 
         public List<Box> GetAllBoxLeafs(){
             if (subBoxes == null)
-                return currentBox;
-            List<Box> tempCont = new List<Box>;
+                return new List<Box>(){currentBox};
+            List<Box> tempCont = new List<Box>();
             foreach (BoxesTree subBoxesTree in subBoxes) {
-                tempCont.addRange(subBoxesTree.GetAllBoxLeaf());
+                tempCont.AddRange(subBoxesTree.GetAllBoxLeafs());
             }
             return tempCont;
         }
