@@ -132,8 +132,9 @@ MonoBehaviour:
   bombPrefab: {fileID: 5657024035820634868, guid: 434107dabf29b15948962fc4159e2f15, type: 3}
   speed: 10
   anglularSpeed: 10
-  bombPlacingCooldown: 6
+  bombPlacingCooldown: 0.5
   expolsionRadius: 5
+  secondsToBlowUp: 1
   hp: 1
 --- !u!114 &2628105028162235637
 MonoBehaviour:

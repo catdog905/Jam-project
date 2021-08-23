@@ -15,7 +15,8 @@ public class Bomb : MonoBehaviour
             objectsToBlowUp.Add(colliderGO);
         }
     }
-    public void SetExplosionRadius(float radius){
+    public void Initialize(float radius,float secondsToBlowUp){
+        this.secondsToBlowUp=secondsToBlowUp;
         colliderOfAOE.radius = radius;
         spriteOfAOE.gameObject.transform.localScale = new Vector3(radius*2,radius*2,1);
     }
@@ -31,10 +32,11 @@ public class Bomb : MonoBehaviour
     }
     void Start()
     {
-        StartCoroutine(blowUp());
+        StartCoroutine(blowUp(secondsToBlowUp));
     }
-    [SerializeField]
-    private float secondsToBlowUp = 3f, secondsOfExplosion = 0.1f;
+    private float secondsOfExplosion = 0.1f;
+
+    float secondsToBlowUp = 0;
 
     [SerializeField]
     private int damage = 10;
@@ -82,7 +84,7 @@ public class Bomb : MonoBehaviour
 
 
 
-    IEnumerator blowUp()
+    IEnumerator blowUp(float secondsToBlowUp)
     {
         AreaOfEffectAppears();
         yield return new WaitForSeconds(secondsToBlowUp);
