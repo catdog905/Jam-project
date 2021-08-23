@@ -6,9 +6,9 @@ public class CircleMap : MonoBehaviour
 {
     private static System.Random rnd = new System.Random(); 
  
-    public int minNumSide = 50;
-    public int mapSideLength = 600;
-    public GameObject roomType;
+    public int minNumSide = 10;
+    public int mapSideLength = 100;
+    public GameObject wall; //ToDebug
 
     // Start is called before the first frame update
     void Start()
@@ -16,7 +16,9 @@ public class CircleMap : MonoBehaviour
         BoxesTree boxesTree = GenerateBinaryBoxesTree(new Box(new Vector2(0, 0), mapSideLength, mapSideLength));
         List<Box> allBoxLeafs = boxesTree.GetAllBoxLeafs();
         foreach (Box box in allBoxLeafs) {
-            Instantiate(roomType, new Vector2(box.leftTopPos.x + box.width/2, box.leftTopPos.y + box.height/2), Quaternion.identity);
+            if (IsBoxInInscribedCircle(box)) {
+                box.DrawBoxFrame(wall);
+            }
         }
     }
 
@@ -32,8 +34,7 @@ public class CircleMap : MonoBehaviour
 
         public BoxesTree(Box currentBox, List<BoxesTree> subBoxes) {
             this.currentBox = currentBox;
-            this.subBoxes = subBoxes;
-        }
+            this.subBoxes = subBoxes;}
 
         public List<Box> GetAllBoxLeafs(){
             if (subBoxes == null)
@@ -55,6 +56,20 @@ public class CircleMap : MonoBehaviour
             this.width = width;
             this.height = height;
         }
+        public void DrawBoxFrame(GameObject wall){
+            for (int i = 0; i < width+1; i++){
+                Instantiate(wall, new Vector2(leftTopPos.x + i, leftTopPos.y), Quaternion.identity);
+            }
+            for (int i = 0; i < width+1; i++){
+                Instantiate(wall, new Vector2(leftTopPos.x + i, leftTopPos.y + height), Quaternion.identity);
+            }
+            for (int j = 1; j < height; j++){
+                Instantiate(wall, new Vector2(leftTopPos.x, leftTopPos.y + j), Quaternion.identity);
+            }
+            for (int j = 1; j < height; j++){
+                Instantiate(wall, new Vector2(leftTopPos.x + width, leftTopPos.y + j), Quaternion.identity);
+            }
+        }
     }
 
     private BoxesTree GenerateBinaryBoxesTree(Box box){
@@ -74,6 +89,10 @@ public class CircleMap : MonoBehaviour
                 GenerateBinaryBoxesTree(newBox1),
                 GenerateBinaryBoxesTree(newBox2)
             });
+    }
+
+    private bool IsBoxInInscribedCircle(Box box){
+        return Mathf.Pow((box.leftTopPos.x + box.width/2 - mapSideLength /2), 2) + Mathf.Pow((box.leftTopPos.y + box.height/2 - mapSideLength /2), 2) <= Mathf.Pow(mapSideLength/2, 2);
     }
 }
 
