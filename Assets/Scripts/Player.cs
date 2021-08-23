@@ -6,26 +6,31 @@ public class Player : MonoBehaviour
 {
 
     private Character character;
-    void Awake(){
+    void Awake()
+    {
         character = GetComponent<Character>();
     }
 
     void Start()
     {
-        
+
     }
 
     void Update()
     {
-        character.SetMovement(new Vector2(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical")));
+        // Movement
+        character.SetMovement(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
 
+        // Look direction
         Vector3 worldPosition;
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = Camera.main.nearClipPlane;
         worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
         character.SetPlaceToLookAt(worldPosition);
-        
-        if (Input.GetKeyDown(KeyCode.Space)){
+
+        // Bomb
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             character.PlaceBomb();
         }
 

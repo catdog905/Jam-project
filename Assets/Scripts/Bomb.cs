@@ -4,19 +4,14 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
-    // Start is called before the first frame update
-    
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log(collision.collider.name);
-    }
     List<GameObject> objectsToBlowUp = new List<GameObject>();
     public void OnTriggerEnter2D(Collider2D collider)
     {
         if (!colliderOfAOE.enabled)
             return;
         GameObject colliderGO = collider.gameObject;
-        if ( !objectsToBlowUp.Contains(colliderGO)){
+        if (!objectsToBlowUp.Contains(colliderGO))
+        {
             objectsToBlowUp.Add(colliderGO);
         }
     }
@@ -25,7 +20,8 @@ public class Bomb : MonoBehaviour
         if (!colliderOfAOE.enabled)
             return;
         GameObject colliderGO = collider.gameObject;
-        if (objectsToBlowUp.Contains(colliderGO)){
+        if (objectsToBlowUp.Contains(colliderGO))
+        {
             objectsToBlowUp.Remove(colliderGO);
         }
     }
@@ -35,7 +31,7 @@ public class Bomb : MonoBehaviour
     }
     [SerializeField]
     private float secondsToBlowUp = 3f, secondsOfExplosion = 0.1f;
-    
+
     [SerializeField]
     private int damage = 10;
     [SerializeField]
@@ -44,20 +40,30 @@ public class Bomb : MonoBehaviour
     [SerializeField]
     private SpriteRenderer spriteOfAOE;
 
-    private void AreaOfEffectAppears(){
-        spriteOfAOE.enabled=true;
+    private void AreaOfEffectAppears()
+    {
+        spriteOfAOE.enabled = true;
     }
 
-    private void AreaOfEffectGoesOff(){
-        colliderOfAOE.enabled=false;
-        foreach(var obj in objectsToBlowUp){
-            if (obj != null){
-                if (obj.tag == "Wall"){
+    private void AreaOfEffectGoesOff()
+    {
+        // Disabling collider makes both trigger functions above know about the fact, that no more changes to list is allowed.
+        colliderOfAOE.enabled = false;
+
+        foreach (var obj in objectsToBlowUp)
+        {
+            if (obj != null)
+            {
+                if (obj.tag == "Wall")
+                {
                     // Destroy wall
                     Destroy(obj);
-                }else{
+                }
+                else
+                {
                     Character character = obj.GetComponent<Character>();
-                    if (character != null){
+                    if (character != null)
+                    {
                         // Damage characters
                         character.TakeDamage(damage);
                     }
@@ -65,25 +71,27 @@ public class Bomb : MonoBehaviour
             }
         }
     }
-    private void ExplosionAnimationStarts(){
-
+    private void ExplosionAnimationStarts()
+    {
+        //TODO explosion animation
     }
 
 
 
-    IEnumerator blowUp(){
+    IEnumerator blowUp()
+    {
         AreaOfEffectAppears();
         yield return new WaitForSeconds(secondsToBlowUp);
 
         ExplosionAnimationStarts();
         yield return new WaitForSeconds(secondsOfExplosion);
-        
+
         AreaOfEffectGoesOff();
         Destroy(gameObject);
     }
 
     void Update()
     {
-        
+
     }
 }

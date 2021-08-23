@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CameraFollower : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
         
@@ -12,7 +11,6 @@ public class CameraFollower : MonoBehaviour
     [SerializeField]
     private Transform whoToFollow;
 
-    // Update is called once per frame
     void Update()
     {
         if (whoToFollow != null)
