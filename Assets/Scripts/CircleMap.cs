@@ -2,18 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriangleMap : MonoBehaviour
+public class CircleMap : MonoBehaviour
 {
-    Vector2 topVertex = new Vector2();
-    Vector2 leftBottomVertex = new Vector2();
-    Vector2 rightBottomVertex = new Vector2();
-    int minNumSide = 50;
-    static System.Random rnd = new System.Random();  
+    private Vector2 topVertex = new Vector2();
+    private Vector2 leftBottomVertex = new Vector2();
+    private Vector2 rightBottomVertex = new Vector2();
+    private static System.Random rnd = new System.Random(); 
+ 
+    public int minNumSide = 50;
+    public int mapSideLength = 600;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        BoxesTree boxesTree = GenerateBinaryBoxesTree(new Box(new Vector2(0, 0), mapSideLength, mapSideLength));
+        List<Box> allBoxLeafs = boxesTree.GetAllBoxLeafs();
+
     }
 
     // Update is called once per frame
@@ -29,6 +33,16 @@ public class TriangleMap : MonoBehaviour
         public BoxesTree(Box currentBox, List<BoxesTree> subBoxes) {
             this.currentBox = currentBox;
             this.subBoxes = subBoxes;
+        }
+
+        public List<Box> GetAllBoxLeafs(){
+            if (subBoxes == null)
+                return currentBox;
+            List<Box> tempCont = new List<Box>;
+            foreach (BoxesTree subBoxesTree in subBoxes) {
+                tempCont.addRange(subBoxesTree.GetAllBoxLeaf());
+            }
+            return tempCont;
         }
     }
 
