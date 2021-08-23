@@ -131,6 +131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   secondsToBlowUp: 3
   secondsOfExplosion: 0.1
+  damage: 10
   colliderOfAOE: {fileID: 4691723051293822280}
   spriteOfAOE: {fileID: 5598021718095255189}
 --- !u!50 &-2654481411895837936

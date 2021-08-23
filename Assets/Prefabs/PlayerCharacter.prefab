@@ -133,6 +133,7 @@ MonoBehaviour:
   speed: 10
   anglularSpeed: 10
   bombPlacingCooldown: 6
+  expolsionRadius: 5
   hp: 1
 --- !u!114 &2628105028162235637
 MonoBehaviour:

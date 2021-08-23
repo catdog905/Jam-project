@@ -15,6 +15,10 @@ public class Bomb : MonoBehaviour
             objectsToBlowUp.Add(colliderGO);
         }
     }
+    public void SetExplosionRadius(float radius){
+        colliderOfAOE.radius = radius;
+        spriteOfAOE.gameObject.transform.localScale = new Vector3(radius*2,radius*2,1);
+    }
     public void OnTriggerExit2D(Collider2D collider)
     {
         if (!colliderOfAOE.enabled)
