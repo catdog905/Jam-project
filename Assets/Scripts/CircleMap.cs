@@ -8,7 +8,8 @@ public class CircleMap : MonoBehaviour
  
     public int minNumSide = 10;
     public int mapSideLength = 100;
-    public GameObject wall; //ToDebug
+    public GameObject destroyedWall; 
+    public GameObject notDestroyedWall; 
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +18,7 @@ public class CircleMap : MonoBehaviour
         List<Box> allBoxLeafs = boxesTree.GetAllBoxLeafs();
         foreach (Box box in allBoxLeafs) {
             if (IsBoxInInscribedCircle(box)) {
-                box.DrawBoxFrame(wall);
+                box.DrawBoxFrame(destroyedWall, notDestroyedWall);
             }
         }
     }
@@ -34,7 +35,8 @@ public class CircleMap : MonoBehaviour
 
         public BoxesTree(Box currentBox, List<BoxesTree> subBoxes) {
             this.currentBox = currentBox;
-            this.subBoxes = subBoxes;}
+            this.subBoxes = subBoxes;
+        }
 
         public List<Box> GetAllBoxLeafs(){
             if (subBoxes == null)
@@ -48,26 +50,39 @@ public class CircleMap : MonoBehaviour
     }
 
     private class Box{
-        public Vector2 leftTopPos;
+        public Vector2 leftTopPos, center;
         public int width, height;
 
         public Box(Vector2 leftTopPos, int width, int height){
             this.leftTopPos = leftTopPos;
             this.width = width;
             this.height = height;
+            center = new Vector2(leftTopPos.x + width/2, leftTopPos.y + height/2);
         }
-        public void DrawBoxFrame(GameObject wall){
-            for (int i = 0; i < width+1; i++){
-                Instantiate(wall, new Vector2(leftTopPos.x + i, leftTopPos.y), Quaternion.identity);
+        public void DrawBoxFrame(GameObject destroyedWall, GameObject notDestroyedWall){
+            for (int i = 0; i < width; i++){
+                if (Mathf.Abs(center.x - (leftTopPos.x + i)) <= width/5)
+                    Instantiate(destroyedWall, new Vector2(leftTopPos.x + i, leftTopPos.y), Quaternion.identity);
+                else
+                    Instantiate(notDestroyedWall, new Vector2(leftTopPos.x + i, leftTopPos.y), Quaternion.identity);
             }
-            for (int i = 0; i < width+1; i++){
-                Instantiate(wall, new Vector2(leftTopPos.x + i, leftTopPos.y + height), Quaternion.identity);
+            for (int i = 0; i < width; i++){
+                if (Mathf.Abs(center.x - (leftTopPos.x + i)) <= width/5)
+                    Instantiate(destroyedWall, new Vector2(leftTopPos.x + i, leftTopPos.y + height), Quaternion.identity);
+                else
+                    Instantiate(notDestroyedWall, new Vector2(leftTopPos.x + i, leftTopPos.y + height), Quaternion.identity);
             }
             for (int j = 1; j < height; j++){
-                Instantiate(wall, new Vector2(leftTopPos.x, leftTopPos.y + j), Quaternion.identity);
+                if (Mathf.Abs(center.y - (leftTopPos.y + j)) <= height/5)
+                    Instantiate(destroyedWall, new Vector2(leftTopPos.x, leftTopPos.y + j), Quaternion.identity);
+                else
+                    Instantiate(notDestroyedWall, new Vector2(leftTopPos.x, leftTopPos.y + j), Quaternion.identity);
             }
             for (int j = 1; j < height; j++){
-                Instantiate(wall, new Vector2(leftTopPos.x + width, leftTopPos.y + j), Quaternion.identity);
+                if (Mathf.Abs(center.y - (leftTopPos.y + j)) <= height/5)
+                    Instantiate(destroyedWall, new Vector2(leftTopPos.x + width, leftTopPos.y + j), Quaternion.identity);
+                else
+                    Instantiate(notDestroyedWall, new Vector2(leftTopPos.x + width, leftTopPos.y + j), Quaternion.identity);
             }
         }
     }
@@ -79,11 +94,11 @@ public class CircleMap : MonoBehaviour
         if (box.height > box.width){
             int line = rnd.Next(box.height / 4, box.height *3 / 4);
             newBox1 = new Box(box.leftTopPos, box.width, line);
-            newBox2 = new Box(new Vector2(box.leftTopPos.x, box.leftTopPos.y + line + 1), box.width, box.height - line);
+            newBox2 = new Box(new Vector2(box.leftTopPos.x, box.leftTopPos.y + line), box.width, box.height - line);
         } else {
             int line = rnd.Next(box.width / 4, box.width * 3 / 4);
             newBox1 = new Box(box.leftTopPos, line, box.height);
-            newBox2 = new Box(new Vector2(box.leftTopPos.x + line + 1, box.leftTopPos.y), box.width - line, box.height);
+            newBox2 = new Box(new Vector2(box.leftTopPos.x + line, box.leftTopPos.y), box.width - line, box.height);
         }
         return new BoxesTree(box, new List<BoxesTree>(){
                 GenerateBinaryBoxesTree(newBox1),
