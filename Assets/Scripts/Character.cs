@@ -13,6 +13,8 @@ public class Character : MonoBehaviour
     [SerializeField]
     private float speed = 10f, anglularSpeed = 10f, bombPlacingCooldown = 6, expolsionRadius = 5,secondsToBlowUp = 3f, bombSpeed = 10f;
     [SerializeField]
+    LayerMask layersToStopExplosion;
+    [SerializeField]
     private int hp = 1;
 
     private bool isBombOnCooldown = false;
@@ -51,7 +53,7 @@ public class Character : MonoBehaviour
         if (isBombOnCooldown)
             return;
         StartCoroutine(ManageBombCooldown());
-        Instantiate(bombPrefab, transform.position, transform.rotation).GetComponent<Bomb>().Initialize(expolsionRadius,secondsToBlowUp, bombSpeed);
+        Instantiate(bombPrefab, transform.position, transform.rotation).GetComponent<Bomb>().Initialize(expolsionRadius,secondsToBlowUp, bombSpeed,layersToStopExplosion);
     }
 
     public void SetMovement(Vector2 dir)

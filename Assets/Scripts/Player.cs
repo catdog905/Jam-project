@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
         character.SetPlaceToLookAt(worldPosition);
 
         // Bomb
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
             character.PlaceBomb();
         }
