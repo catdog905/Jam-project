@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1401770416803431369}
   - component: {fileID: 5970650970523758388}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 4867729989607167645}
   - component: {fileID: 3735561064783027527}
   - component: {fileID: 5741568089850641992}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,6 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 15
+  damage: 1
 --- !u!50 &5741568089850641992
 Rigidbody2D:
   serializedVersion: 4
@@ -161,7 +162,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3336264290592038438}
   - component: {fileID: 1775071289138351593}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: collLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -218,7 +219,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1357118936948189015}
   - component: {fileID: 5815648135145528724}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: collRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
