@@ -23,6 +23,8 @@ public class Bullet : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
+    }
+    public void OnCollisionStay2D(Collision2D collision){
         if (collision.collider.gameObject.tag != "Wall")
         {
             // Not wall
@@ -35,30 +37,29 @@ public class Bullet : MonoBehaviour
             }
             return;
         }
-
-        // Repeat coefficient is responsible for double rotation happening, when both colliders touch something
-        int repeatCoefficient = 1;
-
-        if (alreadyHadCollisionThisFrame)
-        {
-
-            repeatCoefficient = -1;
+        if (collision.otherCollider.name == "collRight"){
+            colRight=true;
+        }else{
+            colLeft=true;
         }
-        alreadyHadCollisionThisFrame = true;
-        if (collision.otherCollider.name == "collRight")
-        {
-            transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + 90 * repeatCoefficient);
-        }
-        else
-        {
-            transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z - 90 * repeatCoefficient);
-        }
+     
     }
-    private bool alreadyHadCollisionThisFrame = false;
+    private bool colRight = false,colLeft=false;
 
     void FixedUpdate()
-    {
-        alreadyHadCollisionThisFrame = false;
+    {   
+        if (colRight && colLeft){
+            transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + 180 );
+        }
+        else if (colRight)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + 90 );
+        }
+        else if (colLeft)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z - 90);
+        }
+        colRight=colLeft=false;
     }
 
     void Update()
