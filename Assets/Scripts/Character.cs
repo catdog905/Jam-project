@@ -6,37 +6,62 @@ public class Character : MonoBehaviour
 {
 
     private Rigidbody2D rb;
-    
     [SerializeField]
-    private float speed=10f,anglularSpeed=10f;
+    private GameObject bombPrefab;
+
+
+    [SerializeField]
+    private float speed = 10f, anglularSpeed = 10f, bombPlacingCooldown = 6, expolsionRadius = 5,secondsToBlowUp = 3f;
     [SerializeField]
     private int hp = 1;
+
+    private bool isBombOnCooldown = false;
 
     Vector2 movementDirection = Vector2.zero;
     Vector2 placeToLookAt = Vector2.zero;
 
     void Start()
     {
-        
+
     }
 
-    void Awake(){
+    void Awake()
+    {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void TakeDamage(int damage){
+    public void TakeDamage(int damage)
+    {
         hp -= damage;
-        if (hp <= 0){
+        if (hp <= 0)
+        {
             Destroy(gameObject);
         }
     }
 
-    public void SetMovement(Vector2 dir){
-        movementDirection=dir;
+    IEnumerator ManageBombCooldown()
+    {
+        isBombOnCooldown = true;
+        yield return new WaitForSeconds(bombPlacingCooldown);
+        isBombOnCooldown = false;
     }
 
-    public void SetPlaceToLookAt(Vector2 PTLA){
-        placeToLookAt=PTLA;
+    public void PlaceBomb()
+    {
+        if (isBombOnCooldown)
+            return;
+        StartCoroutine(ManageBombCooldown());
+        Instantiate(bombPrefab, transform.position, Quaternion.identity).GetComponent<Bomb>().Initialize(expolsionRadius,secondsToBlowUp);
+    }
+
+    public void SetMovement(Vector2 dir)
+    {
+        movementDirection = dir;
+    }
+
+    public void SetPlaceToLookAt(Vector2 PTLA)
+    {
+        placeToLookAt = PTLA;
     }
 
     void Update()
@@ -46,19 +71,19 @@ public class Character : MonoBehaviour
         worldPosition.z = transform.position.z;
 
         Quaternion dir = transform.rotation;
-        Vector3 change = worldPosition-transform.position;
+        Vector3 change = worldPosition - transform.position;
 
         // Angle math
         int dop = 0;
-        if (change.y>0)
+        if (change.y > 0)
             dop = 180;
-        Quaternion finish = Quaternion.Euler(0,0,dop-Mathf.Atan(change.x/change.y)*Mathf.Rad2Deg-90);
+        Quaternion finish = Quaternion.Euler(0, 0, dop - Mathf.Atan(change.x / change.y) * Mathf.Rad2Deg - 90);
 
         // Slow rotation
-        dir = Quaternion.Lerp(dir,finish,Time.deltaTime*anglularSpeed);
-        transform.rotation=dir;
-        
+        dir = Quaternion.Lerp(dir, finish, Time.deltaTime * anglularSpeed);
+        transform.rotation = dir;
+
         // Movement
-        rb.velocity =movementDirection*speed;
+        rb.velocity = movementDirection * speed;
     }
 }
