@@ -2363,7 +2363,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minNumSide: 10
   mapSideLength: 100
-  wall: {fileID: 7318525651468920874, guid: d087732a5f0da41b4bc8c06ea70c9a9f, type: 3}
+  destroyedWall: {fileID: 7318525651468920874, guid: cc095c7dd7dbbdf6ca67b9a378b63db4, type: 3}
+  notDestroyedWall: {fileID: 7318525651468920874, guid: 1c1db60b4e2a9e2038a9623e3ba59733, type: 3}
 --- !u!4 &1762821462
 Transform:
   m_ObjectHideFlags: 0
@@ -2980,8 +2981,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1062493041}
-  - {fileID: 269871501}
   - {fileID: 1765139521}
+  - {fileID: 269871501}
   - {fileID: 303014964}
   - {fileID: 702370713}
   - {fileID: 1879908163}
