@@ -1,0 +1,110 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+
+public class BreadthFirstSearch 
+{
+    private List<List<List<Vector2>>> graph;
+
+    public BreadthFirstSearch(CircleMap map) {
+        List<List<List<Vector2>>> graph = CreateGraph(map);
+    }
+
+    public List<Vector2> GetShortestWay(Vector2 start, Vector2 stop) {
+        Queue<Vector2> q = new Queue<Vector2>();
+        q.Enqueue(start);
+        List<List<bool>> used = Create2DList(graph.Count, graph[0].Count, false);
+        used[(int)start.x][(int)start.y] = true;
+        List<List<int>> d = Create2DList(graph.Count, graph[0].Count, 0);
+        List<List<Vector2>> p = Create2DList(graph.Count, graph[0].Count, new Vector2(0, 0));
+        p[(int)start.x][(int)start.y] = new Vector2(-1, -1);
+        
+        while (q.Count != 0) {
+            Vector2 v = q.Dequeue();
+            for (int i = 0; i < graph[(int)v.x][(int)v.y].Count; i++) {
+                Vector2 to = graph[(int)v.x][(int)v.y][i];
+                if (!used[(int)to.x][(int)to.y]) {
+                    used[(int)to.x][(int)to.y] = true;
+                    q.Enqueue(to);
+                    d[(int)to.x][(int)to.y] = d[(int)v.x][(int)v.y] + 1;
+                    p[(int)to.x][(int)to.y] = v;
+                }
+            }
+        }
+        
+        if (!used[(int)stop.x][(int)stop.y])
+            throw new Exception("There are no any path form start ot stop");
+        List<Vector2> path = new List<Vector2>();
+        for (Vector2 v = stop; v.x != -1 || v.y != 0; v = p[(int)v.x][(int)v.y])
+            path.Add(v);
+        path.Reverse();
+        return path;
+
+    }
+
+    private List<List<List<Vector2>>> CreateGraph(CircleMap circleMap) {
+        List<List<CircleMap.CellType>> map = circleMap.map2D;
+        List<List<List<Vector2>>> graph =  Create2DList(map.Count, map[0].Count, new List<Vector2>());
+        for (int i = 1; i < map.Count - 1; i++) {
+            for (int j = 1; j < map[0].Count - 1; j++) {
+                if (map[i][j] == CircleMap.CellType.NotDestroyedWall)
+                    continue;
+                for (int ii = i - 1; ii <= i + 1; ii++)
+                    for(int jj = j - 1; jj <= j + 1; jj++)
+                        if (map[ii][jj] != CircleMap.CellType.NotDestroyedWall)
+                            graph[i][j].Add(new Vector2(ii, jj));
+            }
+        }
+        return graph;
+    } 
+
+    private List<List<bool>> Create2DList(int width, int height, bool toFill){
+        List<List<bool>> list = new List<List<bool>>();
+        for (int i = 0; i < width; i++) {
+            List<bool> temp = new List<bool>();
+            for (int j = 0; j < height; j++) {
+                temp.Add(toFill);
+            }
+            list.Add(temp);
+        }
+        return list;
+    }
+
+    private List<List<int>> Create2DList(int width, int height, int toFill){
+        List<List<int>> list = new List<List<int>>();
+        for (int i = 0; i < width; i++) {
+            List<int> temp = new List<int>();
+            for (int j = 0; j < height; j++) {
+                temp.Add(toFill);
+            }
+            list.Add(temp);
+        }
+        return list;
+    }
+
+    private List<List<Vector2>> Create2DList(int width, int height, Vector2 toFill){
+        List<List<Vector2>> list = new List<List<Vector2>>();
+        for (int i = 0; i < width; i++) {
+            List<Vector2> temp = new List<Vector2>();
+            for (int j = 0; j < height; j++) {
+                temp.Add(toFill);
+            }
+            list.Add(temp);
+        }
+        return list;
+    }
+
+
+    private List<List<List<Vector2>>> Create2DList(int width, int height, List<Vector2> toFill){
+        List<List<List<Vector2>>> list = new List<List<List<Vector2>>>();
+        for (int i = 0; i < width; i++) {
+            List<List<Vector2>> temp = new List<List<Vector2>>();
+            for (int j = 0; j < height; j++) {
+                temp.Add(new List<Vector2>());
+            }
+            list.Add(temp);
+        }
+        return list;
+    }
+}

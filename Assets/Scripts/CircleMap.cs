@@ -9,8 +9,15 @@ public class CircleMap : MonoBehaviour
     public int minNumSide = 10;
     public int mapSideLength = 100;
     public GameObject destroyedWall; 
-    public GameObject notDestroyedWall; 
+    public GameObject notDestroyedWall;
 
+    public List<List<CellType>> map2D;
+
+    public enum CellType {
+        Floor,
+        DestroyedWall,
+        NotDestroyedWall
+    }
     // Start is called before the first frame update
     void Start()
     {
