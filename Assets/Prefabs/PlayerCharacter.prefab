@@ -136,6 +136,9 @@ MonoBehaviour:
   expolsionRadius: 5
   secondsToBlowUp: 1
   bombSpeed: 20
+  layersToStopExplosion:
+    serializedVersion: 2
+    m_Bits: 512
   hp: 1
 --- !u!114 &2628105028162235637
 MonoBehaviour:

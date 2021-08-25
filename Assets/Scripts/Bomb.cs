@@ -16,23 +16,27 @@ public class Bomb : MonoBehaviour
             objectsToBlowUp.Add(colliderGO);
         }
     }
-    void Awake(){
+    void Awake()
+    {
         rb = GetComponent<Rigidbody2D>();
     }
     Vector2 rbVelocity = Vector2.zero;
-    public void Initialize(float radius, float secondsToBlowUp, float speed)
+    [SerializeField]
+    private Transform[] raycasters;
+    public void Initialize(float radius, float secondsToBlowUp, float speed, LayerMask layersToStopExplosion)
     {
         this.secondsToBlowUp = secondsToBlowUp;
         colliderOfAOE.radius = radius;
         spriteOfAOE.gameObject.transform.localScale = new Vector3(radius * 2, radius * 2, 1);
         rbVelocity = transform.right * speed;
+        this.layersToStopExplosion = layersToStopExplosion;
     }
     public void OnTriggerStay2D(Collider2D collider)
     {
-        if (collider.gameObject.tag == "Wall")
+        if (collider.gameObject.tag == "Wall" || collider.gameObject.tag == "NDWall")
         {
             // We assume that wall is a 1x1 square
-            const float radiusOfWall = 0.5f;
+            const float radiusOfWall = 1f;
             Vector3 wallPosition = collider.gameObject.transform.position;
             if (transform.position.x >= wallPosition.x - radiusOfWall &&
             transform.position.y >= wallPosition.y - radiusOfWall &&
@@ -66,6 +70,7 @@ public class Bomb : MonoBehaviour
     private int damage = 10;
     [SerializeField]
     private CircleCollider2D colliderOfAOE;
+    private LayerMask layersToStopExplosion;
 
     [SerializeField]
     private SpriteRenderer spriteOfAOE;
@@ -73,6 +78,31 @@ public class Bomb : MonoBehaviour
     private void AreaOfEffectAppears()
     {
         spriteOfAOE.enabled = true;
+    }
+
+    private bool HasDirectLineOfVisionWith(GameObject obj)
+    {
+        foreach (var raycaster in raycasters)
+        {
+            // Check if we have direct contact with this raycaster
+            Vector3 change = transform.position - raycaster.position;
+            RaycastHit2D hit = Physics2D.Raycast(raycaster.position, change, change.magnitude, layersToStopExplosion);
+            if (hit.collider != null)
+            {
+                continue;
+            }
+
+            // Check the line of vision
+            change = obj.transform.position - raycaster.position;
+            hit = Physics2D.Raycast(raycaster.position, change, change.magnitude, layersToStopExplosion);
+            // If it doesn't hit something that stops explosion...
+            if (hit.collider == null)
+            {
+                // Then we have direct line of vision!
+                return true;
+            }
+        }
+        return false;
     }
 
     private void AreaOfEffectGoesOff()
@@ -84,6 +114,13 @@ public class Bomb : MonoBehaviour
         {
             if (obj != null)
             {
+                // Not worth it to raycast for unbreakable walls
+                if (obj.tag == "NDWall")
+                    continue;
+                
+                if (!HasDirectLineOfVisionWith(obj))
+                    continue;
+
                 if (obj.tag == "Wall")
                 {
                     // Destroy wall
@@ -115,6 +152,6 @@ public class Bomb : MonoBehaviour
 
     void Update()
     {
-        rb.velocity=rbVelocity;
+        rb.velocity = rbVelocity;
     }
 }
