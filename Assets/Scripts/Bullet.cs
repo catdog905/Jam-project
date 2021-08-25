@@ -23,7 +23,9 @@ public class Bullet : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
+        
     }
+
     public void OnCollisionStay2D(Collision2D collision)
     {
 
@@ -54,30 +56,36 @@ public class Bullet : MonoBehaviour
     }
 
 
-    IEnumerator manageDoubleCornerAllowance()
+    IEnumerator manageCollisionAllowance()
     {
         yield return new WaitForSeconds(0.05f);
-        doubleCornerAllowed = true;
+        collisionAllowed = true;
     }
     private bool colRight = false, colLeft = false;
-    private bool doubleCornerAllowed = true;
+    private bool collisionAllowed = true;
     void FixedUpdate()
     {
-        if (colRight && colLeft)
+        if (!collisionAllowed)
         {
-            if (doubleCornerAllowed)
+            // Do nothing
+        }
+        else
+        {
+            if (colRight && colLeft)
             {
                 transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + 180);
-                doubleCornerAllowed = false;
+
             }
-        }
-        else if (colRight)
-        {
-            transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + 90);
-        }
-        else if (colLeft)
-        {
-            transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z - 90);
+            else if (colRight)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + 90);
+            }
+            else if (colLeft)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z - 90);
+            }
+            collisionAllowed = false;
+            StartCoroutine(manageCollisionAllowance());
         }
         colRight = colLeft = false;
     }
