@@ -23,16 +23,20 @@ public class Bomb : MonoBehaviour
     Vector2 rbVelocity = Vector2.zero;
     [SerializeField]
     private Transform[] raycasters;
-    public void Initialize(float radius, float secondsToBlowUp, float speed, LayerMask layersToStopExplosion)
+    public void Initialize(float radius, float secondsToBlowUp, float speed, LayerMask layersToStopExplosion, int damage)
     {
         this.secondsToBlowUp = secondsToBlowUp;
         colliderOfAOE.radius = radius;
         spriteOfAOE.gameObject.transform.localScale = new Vector3(radius * 2, radius * 2, 1);
         rbVelocity = transform.right * speed;
         this.layersToStopExplosion = layersToStopExplosion;
+        this.damage=damage;
     }
+    private bool coroutineStarted=false;
     public void OnTriggerStay2D(Collider2D collider)
     {
+        if (coroutineStarted)
+            return;
         if (collider.gameObject.tag == "Wall" || collider.gameObject.tag == "NDWall")
         {
             // We assume that wall is a 1x1 square
@@ -44,7 +48,9 @@ public class Bomb : MonoBehaviour
             transform.position.y <= wallPosition.y + radiusOfWall)
             {
                 // We touched the wall, we blow up
-                blowUp();
+                StartCoroutine(blowUp());
+                coroutineStarted=true;
+                rbVelocity = Vector2.zero;
             }
         }
     }
@@ -62,11 +68,8 @@ public class Bomb : MonoBehaviour
     {
         AreaOfEffectAppears();
     }
-    private float secondsOfExplosion = 0.1f;
 
     float secondsToBlowUp = 0;
-
-    [SerializeField]
     private int damage = 10;
     [SerializeField]
     private CircleCollider2D colliderOfAOE;
@@ -144,8 +147,9 @@ public class Bomb : MonoBehaviour
     }
 
 
-    public void blowUp()
+    public IEnumerator blowUp()
     {
+        yield return new WaitForSeconds(secondsToBlowUp);
         AreaOfEffectGoesOff();
         Destroy(gameObject);
     }
