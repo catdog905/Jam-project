@@ -99,7 +99,7 @@ public class Bomb : MonoBehaviour
             change = obj.transform.position - raycaster.position;
             hit = Physics2D.Raycast(raycaster.position, change, change.magnitude, layersToStopExplosion);
             // If it doesn't hit something that stops explosion...
-            if (hit.collider == null)
+            if (hit.collider == null || hit.collider.gameObject.GetInstanceID() == obj.GetInstanceID())
             {
                 // Then we have direct line of vision!
                 return true;
@@ -112,7 +112,7 @@ public class Bomb : MonoBehaviour
     {
         // Disabling collider makes both trigger functions above know about the fact, that no more changes to list is allowed.
         colliderOfAOE.enabled = false;
-
+        List<GameObject> realObjectsToBlowUp = new List<GameObject>(); 
         foreach (var obj in objectsToBlowUp)
         {
             if (obj != null)
@@ -123,7 +123,10 @@ public class Bomb : MonoBehaviour
                 
                 if (!HasDirectLineOfVisionWith(obj))
                     continue;
-
+                realObjectsToBlowUp.Add(obj);
+            }
+        }
+        foreach (var obj in realObjectsToBlowUp){
                 if (obj.tag == "Wall")
                 {
                     // Destroy wall
@@ -139,7 +142,6 @@ public class Bomb : MonoBehaviour
                     }
                 }
             }
-        }
     }
     private void ExplosionAnimationStarts()
     {

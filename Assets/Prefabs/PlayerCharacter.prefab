@@ -136,10 +136,13 @@ MonoBehaviour:
   expolsionRadius: 5
   secondsToBlowUp: 1
   bombSpeed: 20
+  wallPrefab: {fileID: 7318525651468920874, guid: cc095c7dd7dbbdf6ca67b9a378b63db4, type: 3}
   layersToStopExplosion:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 640
   hp: 1
+  bombDamage: 10
+  spawnedWallDistance: 3
 --- !u!114 &2628105028162235637
 MonoBehaviour:
   m_ObjectHideFlags: 0

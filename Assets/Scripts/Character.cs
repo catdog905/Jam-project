@@ -13,9 +13,11 @@ public class Character : MonoBehaviour
     [SerializeField]
     private float speed = 10f, anglularSpeed = 10f, bombPlacingCooldown = 6, expolsionRadius = 5,secondsToBlowUp = 3f, bombSpeed = 10f;
     [SerializeField]
+    private GameObject wallPrefab;
+    [SerializeField]
     LayerMask layersToStopExplosion;
     [SerializeField]
-    private int hp = 1,bombDamage=10;
+    private int hp = 1,bombDamage=10,spawnedWallDistance=2;
 
     private bool isBombOnCooldown = false;
 
@@ -64,6 +66,67 @@ public class Character : MonoBehaviour
     public void SetPlaceToLookAt(Vector2 PTLA)
     {
         placeToLookAt = PTLA;
+    }
+    Vector2[] primaryDirection = new Vector2[]{
+        Vector2.right, // right
+        Vector2.right+Vector2.up, // right-up
+        Vector2.up, // up
+        Vector2.left+Vector2.up, // left-up
+        Vector2.left, // left
+        Vector2.left+Vector2.down, // left-down
+        Vector2.down, // down
+        Vector2.right+Vector2.down, // right-down
+        Vector2.right // right
+    };
+    Vector2[] secondDirection = new Vector2[]{
+        Vector2.up, // right
+        Vector2.left, // right-up
+        Vector2.left, // up
+        Vector2.down, // left-up
+        Vector2.down, // left
+        Vector2.right, // left-down
+        Vector2.right, // down
+        Vector2.up, // right-down
+        Vector2.up // right
+    };
+    Vector2[] thirdDirection = new Vector2[]{
+        Vector2.down, // right
+        Vector2.down, // right-up
+        Vector2.right, // up
+        Vector2.right, // left-up
+        Vector2.up, // left
+        Vector2.up, // left-down
+        Vector2.left, // down
+        Vector2.left, // right-down
+        Vector2.down // right
+    };
+
+    private bool WallIsPlacable(Vector3 pos){
+        Vector2 change = pos - transform.position;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, change, change.magnitude, layersToStopExplosion);
+        return hit.collider == null;
+            
+    }
+
+    public void PlaceWall(){
+        int rotSerialized = Mathf.RoundToInt(transform.rotation.eulerAngles.z/45);
+        Vector2 dir = primaryDirection[rotSerialized];
+        Vector3 opos1 = secondDirection[rotSerialized],opos2=thirdDirection[rotSerialized];
+        Vector3 coords = new Vector3(Mathf.Round(transform.position.x),Mathf.Round(transform.position.y),transform.position.z+2);
+        coords += (Vector3)(dir*spawnedWallDistance);
+        List<Vector3> coordsToBuildWallsAt = new List<Vector3>();
+        if (WallIsPlacable(coords)){
+            coordsToBuildWallsAt.Add(coords);
+        }
+        if (WallIsPlacable(coords+opos1)){
+            coordsToBuildWallsAt.Add(coords+opos1);
+        }
+        if (WallIsPlacable(coords+opos2)){
+            coordsToBuildWallsAt.Add(coords+opos2);
+        }
+        foreach(var vec in coordsToBuildWallsAt){
+            Instantiate(wallPrefab,vec,Quaternion.identity);
+        }
     }
 
     void Update()
