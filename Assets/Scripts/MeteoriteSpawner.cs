@@ -26,9 +26,6 @@ public class MeteoriteSpawner : MonoBehaviour
             Instantiate(meteoritePrefab,meteoritePosition,Quaternion.identity).GetComponent<Meteorite>().Initialize(metoriteRadius,secondsToExplode);
 
 
-
-
-
             yield return new WaitForSeconds(secondsToSpawnNext);
         }        
     }

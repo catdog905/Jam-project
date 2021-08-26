@@ -134,6 +134,7 @@ MonoBehaviour:
   anglularSpeed: 10
   bombPlacingCooldown: 0.5
   expolsionRadius: 5
+  cooldownBetweenWallCreation: 0.5
   secondsToBlowUp: 1
   bombSpeed: 20
   wallPrefab: {fileID: 7318525651468920874, guid: cc095c7dd7dbbdf6ca67b9a378b63db4, type: 3}
@@ -191,7 +192,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.41
 --- !u!1 &7795501072678209736
 GameObject:
   m_ObjectHideFlags: 0
