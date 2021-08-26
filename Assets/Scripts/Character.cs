@@ -11,7 +11,7 @@ public class Character : MonoBehaviour
 
 
     [SerializeField]
-    private float speed = 10f, anglularSpeed = 10f, bombPlacingCooldown = 6, expolsionRadius = 5,secondsToBlowUp = 3f, bombSpeed = 10f;
+    private float speed = 10f, anglularSpeed = 10f, bombPlacingCooldown = 6, expolsionRadius = 5,cooldownBetweenWallCreation=0.5f,secondsToBlowUp = 3f, bombSpeed = 10f;
     [SerializeField]
     private GameObject wallPrefab;
     [SerializeField]
@@ -19,7 +19,7 @@ public class Character : MonoBehaviour
     [SerializeField]
     private int hp = 1,bombDamage=10,spawnedWallDistance=2;
 
-    private bool isBombOnCooldown = false;
+    private bool isBombOnCooldown = false,isWallOnCooldown = false;
 
     Vector2 movementDirection = Vector2.zero;
     Vector2 placeToLookAt = Vector2.zero;
@@ -48,6 +48,12 @@ public class Character : MonoBehaviour
         isBombOnCooldown = true;
         yield return new WaitForSeconds(bombPlacingCooldown);
         isBombOnCooldown = false;
+    }
+    IEnumerator ManageWallCooldown()
+    {
+        isWallOnCooldown = true;
+        yield return new WaitForSeconds(cooldownBetweenWallCreation);
+        isWallOnCooldown = false;
     }
 
     public void PlaceBomb()
@@ -109,6 +115,9 @@ public class Character : MonoBehaviour
     }
 
     public void PlaceWall(){
+        if (isWallOnCooldown)
+            return;
+        StartCoroutine(ManageWallCooldown());
         int rotSerialized = Mathf.RoundToInt(transform.rotation.eulerAngles.z/45);
         Vector2 dir = primaryDirection[rotSerialized];
         Vector3 opos1 = secondDirection[rotSerialized],opos2=thirdDirection[rotSerialized];
