@@ -2100,6 +2100,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e0e72cd1b706b953a5a01e9c35c81dc, type: 3}
+--- !u!4 &1514597447 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4223621441400882177, guid: a38beeb75b0be46d5ba1ca2cdc619fb6, type: 3}
+  m_PrefabInstance: {fileID: 5648138412057512942}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1543379001 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4867729989607167645, guid: 9e0e72cd1b706b953a5a01e9c35c81dc, type: 3}
@@ -2360,10 +2365,11 @@ MonoBehaviour:
   map: {fileID: 1762821461}
   minSecondsToWait: 1
   maxSecondsToWait: 10
-  minMeteoriteSize: 0.01
-  maxMeteoriteSize: 0.4
+  minMeteoriteSize: 1
+  maxMeteoriteSize: 5
   minExplosionTime: 2
   maxExplosionTime: 5
+  radius: 10
 --- !u!4 &1745617066
 Transform:
   m_ObjectHideFlags: 0
@@ -2371,12 +2377,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1745617064}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 30.418386, y: 27.403389, z: -11.47195}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -11.47195}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 1514597447}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1760364763 stripped
 Transform:
