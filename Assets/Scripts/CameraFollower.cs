@@ -16,7 +16,7 @@ public class CameraFollower : MonoBehaviour
     [SerializeField]
     private GameObject wallFather,playerPrefab;
     [SerializeField]
-    private Transform whoToFollow;
+    public Transform whoToFollow;
     bool workingOnRespawn = false;
     IEnumerator confirmRespawn(){
         workingOnRespawn=true;

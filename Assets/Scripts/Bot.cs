@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Bot : MonoBehaviour
 {
-    public GameObject target;
     public float distanceToEnemy = 10;
     public GameObject mapGeneration;
     public float spead = 0.00005f;
@@ -35,8 +34,9 @@ public class Bot : MonoBehaviour
     private float nextActionTime = 0.0f;
     public float period = 0.5f;
     private void GoToTarget() {
+        Transform target = CameraFollower.singleton.whoToFollow;
         Vector2 currentPosition = transform.position;
-        List<Vector2> path = searchPath.GetShortestWay(currentPosition, target.transform.position);
+        List<Vector2> path = searchPath.GetShortestWay(currentPosition, target.position);
         Vector2 goal;
         Debug.Log(path[0]);
         Debug.Log(path[1]);
@@ -52,7 +52,7 @@ public class Bot : MonoBehaviour
 
         Vector2 dir = (goal - currentPosition);
         character.SetMovement(dir);
-        character.SetPlaceToLookAt(target.transform.position);
+        character.SetPlaceToLookAt(target.position);
 
 
 
