@@ -23,43 +23,71 @@ public class Bullet : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
+        
     }
-    public void OnCollisionStay2D(Collision2D collision){
-        if (collision.collider.gameObject.tag != "Wall")
+
+    public void OnCollisionStay2D(Collision2D collision)
+    {
+
+        // We assume that it's only possible to collide:
+        // with walls,
+        // with characters
+
+        Character character = collision.collider.gameObject.GetComponent<Character>();
+        if (character != null)
         {
-            // Not wall
-            Character character = collision.collider.gameObject.GetComponent<Character>();
-            if (character != null)
-            {
-                // Character
-                character.TakeDamage(damage);
-                Destroy(gameObject);
-            }
+            // Character
+            character.TakeDamage(damage);
+            Destroy(gameObject);
             return;
         }
-        if (collision.otherCollider.name == "collRight"){
-            colRight=true;
-        }else{
-            colLeft=true;
-        }
-     
-    }
-    private bool colRight = false,colLeft=false;
 
+        // Wall
+
+        if (collision.otherCollider.name == "collRight")
+        {
+            colRight = true;
+        }
+        else
+        {
+            colLeft = true;
+        }
+
+    }
+
+
+    IEnumerator manageCollisionAllowance()
+    {
+        yield return new WaitForSeconds(0.05f);
+        collisionAllowed = true;
+    }
+    private bool colRight = false, colLeft = false;
+    private bool collisionAllowed = true;
     void FixedUpdate()
-    {   
-        if (colRight && colLeft){
-            transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + 180 );
-        }
-        else if (colRight)
+    {
+        if (!collisionAllowed)
         {
-            transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + 90 );
+            // Do nothing
         }
-        else if (colLeft)
+        else
         {
-            transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z - 90);
+            if (colRight && colLeft)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + 180);
+
+            }
+            else if (colRight)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + 90);
+            }
+            else if (colLeft)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z - 90);
+            }
+            collisionAllowed = false;
+            StartCoroutine(manageCollisionAllowance());
         }
-        colRight=colLeft=false;
+        colRight = colLeft = false;
     }
 
     void Update()

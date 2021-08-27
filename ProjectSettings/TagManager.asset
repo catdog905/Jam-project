@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Wall
+  - NDWall
   layers:
   - Default
   - TransparentFX
@@ -14,10 +15,10 @@ TagManager:
   - UI
   - 
   - Wall
-  - Bullets
-  - 
-  - 
-  - 
+  - Bullet
+  - NDWall
+  - Bomb
+  - Meteorites
   - 
   - 
   - 

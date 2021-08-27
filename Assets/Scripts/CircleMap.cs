@@ -9,9 +9,10 @@ public class CircleMap : MonoBehaviour
     public int minNumSide = 10;
     public int mapSideLength = 100;
     public GameObject destroyedWall; 
-    public GameObject notDestroyedWall;
+    public GameObject notDestroyedWall; 
+    public static CircleMap singleton;
 
-    public List<List<CellType>> map2D = new List<List<CellType>>();
+    public List<List<CellType>> map2D = new List<List<CellType>>(); 
 
     public enum CellType {
         Floor,
@@ -20,6 +21,7 @@ public class CircleMap : MonoBehaviour
     }
 
     void Awake() {
+        singleton=this;
         for (int i = 0; i < mapSideLength+100; i++) {
             List<CellType> temp = new List<CellType>();
             for (int j = 0; j < mapSideLength+100; j++) {

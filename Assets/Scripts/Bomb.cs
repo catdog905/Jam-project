@@ -16,23 +16,31 @@ public class Bomb : MonoBehaviour
             objectsToBlowUp.Add(colliderGO);
         }
     }
-    void Awake(){
+    void Awake()
+    {
         rb = GetComponent<Rigidbody2D>();
     }
     Vector2 rbVelocity = Vector2.zero;
-    public void Initialize(float radius, float secondsToBlowUp, float speed)
+    [SerializeField]
+    private Transform[] raycasters;
+    public void Initialize(float radius, float secondsToBlowUp, float speed, LayerMask layersToStopExplosion, int damage)
     {
         this.secondsToBlowUp = secondsToBlowUp;
         colliderOfAOE.radius = radius;
         spriteOfAOE.gameObject.transform.localScale = new Vector3(radius * 2, radius * 2, 1);
         rbVelocity = transform.right * speed;
+        this.layersToStopExplosion = layersToStopExplosion;
+        this.damage=damage;
     }
+    private bool coroutineStarted=false;
     public void OnTriggerStay2D(Collider2D collider)
     {
-        if (collider.gameObject.tag == "Wall")
+        if (coroutineStarted)
+            return;
+        if (collider.gameObject.tag == "Wall" || collider.gameObject.tag == "NDWall")
         {
             // We assume that wall is a 1x1 square
-            const float radiusOfWall = 0.5f;
+            const float radiusOfWall = 1f;
             Vector3 wallPosition = collider.gameObject.transform.position;
             if (transform.position.x >= wallPosition.x - radiusOfWall &&
             transform.position.y >= wallPosition.y - radiusOfWall &&
@@ -40,7 +48,9 @@ public class Bomb : MonoBehaviour
             transform.position.y <= wallPosition.y + radiusOfWall)
             {
                 // We touched the wall, we blow up
-                blowUp();
+                StartCoroutine(blowUp());
+                coroutineStarted=true;
+                rbVelocity = Vector2.zero;
             }
         }
     }
@@ -58,14 +68,12 @@ public class Bomb : MonoBehaviour
     {
         AreaOfEffectAppears();
     }
-    private float secondsOfExplosion = 0.1f;
 
     float secondsToBlowUp = 0;
-
-    [SerializeField]
     private int damage = 10;
     [SerializeField]
     private CircleCollider2D colliderOfAOE;
+    private LayerMask layersToStopExplosion;
 
     [SerializeField]
     private SpriteRenderer spriteOfAOE;
@@ -75,15 +83,50 @@ public class Bomb : MonoBehaviour
         spriteOfAOE.enabled = true;
     }
 
+    private bool HasDirectLineOfVisionWith(GameObject obj)
+    {
+        foreach (var raycaster in raycasters)
+        {
+            // Check if we have direct contact with this raycaster
+            Vector3 change = transform.position - raycaster.position;
+            RaycastHit2D hit = Physics2D.Raycast(raycaster.position, change, change.magnitude, layersToStopExplosion);
+            if (hit.collider != null)
+            {
+                continue;
+            }
+
+            // Check the line of vision
+            change = obj.transform.position - raycaster.position;
+            hit = Physics2D.Raycast(raycaster.position, change, change.magnitude, layersToStopExplosion);
+            // If it doesn't hit something that stops explosion...
+            if (hit.collider == null || hit.collider.gameObject.GetInstanceID() == obj.GetInstanceID())
+            {
+                // Then we have direct line of vision!
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void AreaOfEffectGoesOff()
     {
         // Disabling collider makes both trigger functions above know about the fact, that no more changes to list is allowed.
         colliderOfAOE.enabled = false;
-
+        List<GameObject> realObjectsToBlowUp = new List<GameObject>(); 
         foreach (var obj in objectsToBlowUp)
         {
             if (obj != null)
             {
+                // Not worth it to raycast for unbreakable walls
+                if (obj.tag == "NDWall")
+                    continue;
+                
+                if (!HasDirectLineOfVisionWith(obj))
+                    continue;
+                realObjectsToBlowUp.Add(obj);
+            }
+        }
+        foreach (var obj in realObjectsToBlowUp){
                 if (obj.tag == "Wall")
                 {
                     // Destroy wall
@@ -99,7 +142,6 @@ public class Bomb : MonoBehaviour
                     }
                 }
             }
-        }
     }
     private void ExplosionAnimationStarts()
     {
@@ -107,14 +149,16 @@ public class Bomb : MonoBehaviour
     }
 
 
-    public void blowUp()
+    public IEnumerator blowUp()
     {
+        yield return new WaitForSeconds(secondsToBlowUp);
         AreaOfEffectGoesOff();
+        CameraFollower.singleton.explosionSound2.Play();
         Destroy(gameObject);
     }
 
     void Update()
     {
-        rb.velocity=rbVelocity;
+        rb.velocity = rbVelocity;
     }
 }
