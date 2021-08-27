@@ -29,9 +29,12 @@ public class Player : MonoBehaviour
         character.SetPlaceToLookAt(worldPosition);
 
         // Bomb
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetMouseButton(0))
         {
             character.PlaceBomb();
+        }else if (Input.GetMouseButton(1))
+        {
+            character.PlaceWall();
         }
 
     }

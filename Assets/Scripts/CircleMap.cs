@@ -10,17 +10,38 @@ public class CircleMap : MonoBehaviour
     public int mapSideLength = 100;
     public GameObject destroyedWall; 
     public GameObject notDestroyedWall; 
+    public static CircleMap singleton;
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    public List<List<CellType>> map2D = new List<List<CellType>>(); 
+
+    public enum CellType {
+        Floor,
+        DestroyedWall,
+        NotDestroyedWall
+    }
+
+    void Awake() {
+        singleton=this;
+        for (int i = 0; i < mapSideLength+100; i++) {
+            List<CellType> temp = new List<CellType>();
+            for (int j = 0; j < mapSideLength+100; j++) {
+                temp.Add(CellType.Floor);
+            }
+            map2D.Add(temp);
+        }
         BoxesTree boxesTree = GenerateBinaryBoxesTree(new Box(new Vector2(0, 0), mapSideLength, mapSideLength));
         List<Box> allBoxLeafs = boxesTree.GetAllBoxLeafs();
         foreach (Box box in allBoxLeafs) {
             if (IsBoxInInscribedCircle(box)) {
-                box.DrawBoxFrame(destroyedWall, notDestroyedWall);
+                box.DrawBoxFrame(destroyedWall, notDestroyedWall, map2D);
             }
         }
+        RenderMap2D();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
     }
 
     // Update is called once per frame
@@ -59,30 +80,30 @@ public class CircleMap : MonoBehaviour
             this.height = height;
             center = new Vector2(leftTopPos.x + width/2, leftTopPos.y + height/2);
         }
-        public void DrawBoxFrame(GameObject destroyedWall, GameObject notDestroyedWall){
+        public void DrawBoxFrame(GameObject destroyedWall, GameObject notDestroyedWall, List<List<CellType>> map2D) {
             for (int i = 0; i < width; i++){
                 if (Mathf.Abs(center.x - (leftTopPos.x + i)) <= width/5)
-                    Instantiate(destroyedWall, new Vector2(leftTopPos.x + i, leftTopPos.y), Quaternion.identity);
+                    map2D[(int)(leftTopPos.x + i)][(int)(leftTopPos.y)] = CellType.DestroyedWall;
                 else
-                    Instantiate(notDestroyedWall, new Vector2(leftTopPos.x + i, leftTopPos.y), Quaternion.identity);
+                    map2D[(int)(leftTopPos.x + i)][(int)(leftTopPos.y)] = CellType.NotDestroyedWall;
             }
             for (int i = 0; i < width; i++){
                 if (Mathf.Abs(center.x - (leftTopPos.x + i)) <= width/5)
-                    Instantiate(destroyedWall, new Vector2(leftTopPos.x + i, leftTopPos.y + height), Quaternion.identity);
+                    map2D[(int)(leftTopPos.x + i)][(int)(leftTopPos.y + height)] = CellType.DestroyedWall;
                 else
-                    Instantiate(notDestroyedWall, new Vector2(leftTopPos.x + i, leftTopPos.y + height), Quaternion.identity);
+                    map2D[(int)(leftTopPos.x + i)][(int)(leftTopPos.y + height)] = CellType.NotDestroyedWall;
             }
             for (int j = 1; j < height; j++){
                 if (Mathf.Abs(center.y - (leftTopPos.y + j)) <= height/5)
-                    Instantiate(destroyedWall, new Vector2(leftTopPos.x, leftTopPos.y + j), Quaternion.identity);
+                    map2D[(int)(leftTopPos.x)][(int)(leftTopPos.y + j)] = CellType.DestroyedWall;
                 else
-                    Instantiate(notDestroyedWall, new Vector2(leftTopPos.x, leftTopPos.y + j), Quaternion.identity);
+                    map2D[(int)(leftTopPos.x)][(int)(leftTopPos.y + j)] = CellType.NotDestroyedWall;
             }
             for (int j = 1; j < height; j++){
                 if (Mathf.Abs(center.y - (leftTopPos.y + j)) <= height/5)
-                    Instantiate(destroyedWall, new Vector2(leftTopPos.x + width, leftTopPos.y + j), Quaternion.identity);
+                    map2D[(int)(leftTopPos.x + width)][(int)(leftTopPos.y + j)] = CellType.DestroyedWall;
                 else
-                    Instantiate(notDestroyedWall, new Vector2(leftTopPos.x + width, leftTopPos.y + j), Quaternion.identity);
+                    map2D[(int)(leftTopPos.x + width)][(int)(leftTopPos.y + j)] = CellType.NotDestroyedWall;
             }
         }
     }
@@ -108,6 +129,18 @@ public class CircleMap : MonoBehaviour
 
     private bool IsBoxInInscribedCircle(Box box){
         return Mathf.Pow((box.leftTopPos.x + box.width/2 - mapSideLength /2), 2) + Mathf.Pow((box.leftTopPos.y + box.height/2 - mapSideLength /2), 2) <= Mathf.Pow(mapSideLength/2, 2);
+    }
+
+    private void RenderMap2D (){
+            for (int i = 0; i < map2D.Count; i++)
+                for (int j = 0; j < map2D[0].Count; j++)
+                    if (map2D[i][j] == CellType.Floor)
+                        continue;
+                    else
+                        if (map2D[i][j] == CellType.DestroyedWall)
+                            Instantiate(destroyedWall, new Vector2(i, j), Quaternion.identity);
+                        else if (map2D[i][j] == CellType.NotDestroyedWall)
+                            Instantiate(notDestroyedWall, new Vector2(i, j), Quaternion.identity);
     }
 }
 
