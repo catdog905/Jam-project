@@ -8,12 +8,13 @@ public class Character : MonoBehaviour
     private Rigidbody2D rb;
     [SerializeField]
     private GameObject bombPrefab;
+    public GameObject wallFather;
 
 
     [SerializeField]
     private float speed = 10f, anglularSpeed = 10f, bombPlacingCooldown = 6, expolsionRadius = 5,cooldownBetweenWallCreation=0.5f,secondsToBlowUp = 3f, bombSpeed = 10f;
     [SerializeField]
-    private GameObject wallPrefab;
+    private GameObject wallPrefab,wallCreatorPrefab;
     [SerializeField]
     LayerMask layersToStopExplosion;
     [SerializeField]
@@ -121,8 +122,10 @@ public class Character : MonoBehaviour
         int rotSerialized = Mathf.RoundToInt(transform.rotation.eulerAngles.z/45);
         Vector2 dir = primaryDirection[rotSerialized];
         Vector3 opos1 = secondDirection[rotSerialized],opos2=thirdDirection[rotSerialized];
-        Vector3 coords = new Vector3(Mathf.Round(transform.position.x),Mathf.Round(transform.position.y),transform.position.z+2);
-        coords += (Vector3)(dir*spawnedWallDistance);
+        Vector3 coords = new Vector3(transform.position.x,transform.position.y,transform.position.z+99);
+        coords += (Vector3)(transform.right*spawnedWallDistance);
+        coords.x = Mathf.Round(coords.x);
+        coords.y = Mathf.Round(coords.y);
         List<Vector3> coordsToBuildWallsAt = new List<Vector3>();
         if (WallIsPlacable(coords)){
             coordsToBuildWallsAt.Add(coords);
@@ -134,8 +137,25 @@ public class Character : MonoBehaviour
             coordsToBuildWallsAt.Add(coords+opos2);
         }
         foreach(var vec in coordsToBuildWallsAt){
-            Instantiate(wallPrefab,vec,Quaternion.identity);
+            StartCoroutine(spawnWall(vec));
         }
+    }
+    IEnumerator spawnWall(Vector3 vector3){
+        float t = 0;
+        const float timeToFinish = 0.15f;
+        Vector3 start = transform.position;
+        GameObject wallCreator = Instantiate(wallCreatorPrefab);
+        while (true){
+            t+=Time.deltaTime;
+            if (t >= timeToFinish){
+                Destroy(wallCreator);
+                break;
+            }
+            wallCreator.transform.position = Vector3.Lerp(start,vector3,t/timeToFinish);
+            yield return null;
+        }
+        Instantiate(wallPrefab,vector3,Quaternion.identity,wallFather.transform).transform.position+=new Vector3(0.001f,0,0);
+       
     }
 
     void Update()

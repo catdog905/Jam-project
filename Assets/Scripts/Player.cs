@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
         }else if (Input.GetMouseButton(1))
         {
             character.PlaceWall();
-            }
+        }
 
     }
 }

@@ -153,6 +153,7 @@ public class Bomb : MonoBehaviour
     {
         yield return new WaitForSeconds(secondsToBlowUp);
         AreaOfEffectGoesOff();
+        CameraFollower.singleton.explosionSound2.Play();
         Destroy(gameObject);
     }
 

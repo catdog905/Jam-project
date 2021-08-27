@@ -7,8 +7,6 @@ public class MeteoriteSpawner : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField]
     private GameObject meteoritePrefab;
-
-    [SerializeField]
     private CircleMap map;
 
     [SerializeField]
@@ -30,6 +28,7 @@ public class MeteoriteSpawner : MonoBehaviour
         }        
     }
     void Awake(){
+        map = CircleMap.singleton;
         StartCoroutine(autoSpawnMeteorites());
     }
     void Start()

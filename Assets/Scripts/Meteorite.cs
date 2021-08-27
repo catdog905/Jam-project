@@ -12,6 +12,11 @@ public class Meteorite : MonoBehaviour
     [SerializeField] CircleCollider2D colliderOfAOE;
     public void OnTriggerEnter2D(Collider2D collider)
     {
+        if (collider.gameObject.name == "WinField"){
+            Physics2D.IgnoreCollision(collider,colliderOfAOE);
+            return;
+          //  GetComponent<Rigidbody2D>().
+        }
         OnTriggerStay2D(collider);
     }
     public void OnTriggerStay2D(Collider2D collider)
@@ -30,6 +35,7 @@ public class Meteorite : MonoBehaviour
             // Explode
             colliderOfAOE.enabled=true;
             transform.position+=new Vector3(0.01f,0.01f);
+            CameraFollower.singleton.explosionSound1.Play();
             break;
         }
         float currentState = 0.7f-(timePassed/timeForExplosion)/2;
