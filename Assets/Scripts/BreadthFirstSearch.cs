@@ -75,8 +75,6 @@ public class BreadthFirstSearch
                     continue;
                 for (int ii = i - 1; ii <= i + 1; ii++)
                     for(int jj = j - 1; jj <= j + 1; jj++) {
-                        if (map[ii][jj] != CircleMap.CellType.NotDestroyedWall)
-                            Debug.Log("HHHHHHHHHH");
                         if ((map[ii][jj] == CircleMap.CellType.DestroyedWall || map[ii][jj] == CircleMap.CellType.Floor)&& !(ii == i && jj == j)  && (ii == i || jj == j))
                             graph[i][j].Add(new Vector2(ii, jj));
                     }

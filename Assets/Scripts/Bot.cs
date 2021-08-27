@@ -36,6 +36,30 @@ public class Bot : MonoBehaviour
     public float period = 0.5f;
     private void GoToTarget() {
         Vector2 currentPosition = transform.position;
+        List<Vector2> path = searchPath.GetShortestWay(currentPosition, target.transform.position);
+        Vector2 goal;
+        Debug.Log(path[0]);
+        Debug.Log(path[1]);
+        //if (Mathf.Abs(path[0].x-path[1].x)<1f&&Mathf.Abs(path[0].y-path[1].y)<0.9f){
+        Debug.Log(true);
+            goal = path[2];
+
+        //}
+        //else{
+        Debug.Log(false);
+         //   goal = path[1];
+        //}
+
+        Vector2 dir = (goal - currentPosition);
+        character.SetMovement(dir);
+        character.SetPlaceToLookAt(target.transform.position);
+
+
+
+
+
+        return;
+         currentPosition = transform.position;
         if (Time.time > nextActionTime) {
             nextActionTime =  Time.time + period;
             currentPath = searchPath.GetShortestWay(currentPosition, target.transform.position);
@@ -50,7 +74,7 @@ public class Bot : MonoBehaviour
             var heading = currentPath[curNextPath] - currentPosition;
             var distance = heading.magnitude;
             var direction = heading / distance;
-            character.SetMovement(direction * spead);
+            character.SetMovement(direction);
         //character.SetPlaceToLookAt(new Vector2(path[0].x - currentPosition.x, path[1].y - currentPosition.y));
         //
         }
