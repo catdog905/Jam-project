@@ -5,10 +5,11 @@ using System;
 
 public class BreadthFirstSearch 
 {
-    private List<List<List<Vector2>>> graph;
+    private List<List<List<Vector2>>> graph = new List<List<List<Vector2>>>();
+
 
     public BreadthFirstSearch(CircleMap map) {
-        List<List<List<Vector2>>> graph = CreateGraph(map);
+        graph = CreateGraph(map);
     }
 
     public List<Vector2> GetShortestWay(Vector2 start, Vector2 stop) {
@@ -20,7 +21,9 @@ public class BreadthFirstSearch
         List<List<Vector2>> p = Create2DList(graph.Count, graph[0].Count, new Vector2(0, 0));
         p[(int)start.x][(int)start.y] = new Vector2(-1, -1);
         
-        while (q.Count != 0) {
+
+        bool endFlag = false;
+        while (q.Count != 0 && !endFlag) {
             Vector2 v = q.Dequeue();
             for (int i = 0; i < graph[(int)v.x][(int)v.y].Count; i++) {
                 Vector2 to = graph[(int)v.x][(int)v.y][i];
@@ -29,17 +32,37 @@ public class BreadthFirstSearch
                     q.Enqueue(to);
                     d[(int)to.x][(int)to.y] = d[(int)v.x][(int)v.y] + 1;
                     p[(int)to.x][(int)to.y] = v;
+                    if (to.x == stop.x && to.y == stop.y) {
+                        endFlag = true;
+                        break;
+                    }   
+
                 }
             }
         }
-        
-        if (!used[(int)stop.x][(int)stop.y])
-            throw new Exception("There are no any path form start ot stop");
+        Debug.Log(graph[(int)stop.x][(int)stop.y].Count);
         List<Vector2> path = new List<Vector2>();
-        for (Vector2 v = stop; v.x != -1 || v.y != 0; v = p[(int)v.x][(int)v.y])
+        if (!used[(int)stop.x][(int)stop.y]){
+          /*  int cnt = 0;
+            foreach(List<List<Vector2>> lst in graph)
+                foreach (List<Vector2> el in lst)
+                    foreach (Vector2 to in el)
+                        if (to == stop)
+                            cnt++;
+         throw new Exception("There are no any path form start ot stop " + start + " " + stop + "To array of start point: " + graph[(int)start.x][(int)stop.y].Count + "Count pathes to stop " + cnt);
+        */
+            return null;
+        }
+        for (Vector2 v = stop; v.x != -1 || v.y != -1; v = p[(int)v.x][(int)v.y]){
             path.Add(v);
+        }
         path.Reverse();
-        return path;
+        string str = "";
+        foreach (Vector2 v in path)
+            str = str + v;
+        Debug.Log(str); 
+        /*Debug.Log(path[0].x + " " + path[0].y + " " +  path[1].x + " " + path[1].y);
+        */return path;
 
     }
 
@@ -51,9 +74,12 @@ public class BreadthFirstSearch
                 if (map[i][j] == CircleMap.CellType.NotDestroyedWall)
                     continue;
                 for (int ii = i - 1; ii <= i + 1; ii++)
-                    for(int jj = j - 1; jj <= j + 1; jj++)
+                    for(int jj = j - 1; jj <= j + 1; jj++) {
                         if (map[ii][jj] != CircleMap.CellType.NotDestroyedWall)
+                            Debug.Log("HHHHHHHHHH");
+                        if ((map[ii][jj] == CircleMap.CellType.DestroyedWall || map[ii][jj] == CircleMap.CellType.Floor)&& !(ii == i && jj == j)  && (ii == i || jj == j))
                             graph[i][j].Add(new Vector2(ii, jj));
+                    }
             }
         }
         return graph;
