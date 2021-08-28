@@ -10,6 +10,7 @@ public class Meteorite : MonoBehaviour
         
     }
     [SerializeField] CircleCollider2D colliderOfAOE;
+    [SerializeField] GameObject bulletPrefab;
     public void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.name == "WinField"){
@@ -36,6 +37,15 @@ public class Meteorite : MonoBehaviour
             colliderOfAOE.enabled=true;
             transform.position+=new Vector3(0.01f,0.01f);
             CameraFollower.singleton.explosionSound1.Play();
+            Vector3 bulPos = transform.position;
+            bulPos.z=0;
+            Vector3 rotEuler = new Vector3();
+            rotEuler.z=45;
+            for (int i = 0; i < 4;++i){
+                Instantiate(bulletPrefab,bulPos,Quaternion.Euler(rotEuler));
+                rotEuler.z+=90;
+            }
+            Destroy(spriteRenderer);
             break;
         }
         float currentState = 0.7f-(timePassed/timeForExplosion)/2;

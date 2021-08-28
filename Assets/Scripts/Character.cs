@@ -122,7 +122,7 @@ public class Character : MonoBehaviour
         int rotSerialized = Mathf.RoundToInt(transform.rotation.eulerAngles.z/45);
         Vector2 dir = primaryDirection[rotSerialized];
         Vector3 opos1 = secondDirection[rotSerialized],opos2=thirdDirection[rotSerialized];
-        Vector3 coords = new Vector3(transform.position.x,transform.position.y,transform.position.z+99);
+        Vector3 coords = new Vector3(transform.position.x,transform.position.y,0);
         coords += (Vector3)(transform.right*spawnedWallDistance);
         coords.x = Mathf.Round(coords.x);
         coords.y = Mathf.Round(coords.y);

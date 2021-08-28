@@ -72,7 +72,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToWin: 10
-  textSaved: 
+  text1: {fileID: 0}
+  text2: {fileID: 0}
 --- !u!1 &5647555452689451087
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,5 +154,5 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
+  m_MaskInteraction: 2
   m_SpriteSortPoint: 0

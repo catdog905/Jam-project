@@ -40,7 +40,7 @@ public class Bomb : MonoBehaviour
         if (collider.gameObject.tag == "Wall" || collider.gameObject.tag == "NDWall")
         {
             // We assume that wall is a 1x1 square
-            const float radiusOfWall = 1f;
+            const float radiusOfWall = 1.3f;
             Vector3 wallPosition = collider.gameObject.transform.position;
             if (transform.position.x >= wallPosition.x - radiusOfWall &&
             transform.position.y >= wallPosition.y - radiusOfWall &&
@@ -151,6 +151,8 @@ public class Bomb : MonoBehaviour
 
     public IEnumerator blowUp()
     {
+        BombRotation br = GetComponentInChildren<BombRotation>();
+        br.enabled=false;
         yield return new WaitForSeconds(secondsToBlowUp);
         AreaOfEffectGoesOff();
         CameraFollower.singleton.explosionSound2.Play();
