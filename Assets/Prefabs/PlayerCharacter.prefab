@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bombPrefab: {fileID: 5657024035820634868, guid: 434107dabf29b15948962fc4159e2f15, type: 3}
   wallFather: {fileID: 0}
-  speed: 10
+  speed: 20
   anglularSpeed: 10
   bombPlacingCooldown: 0.5
   expolsionRadius: 5

@@ -9,7 +9,7 @@ public class Bot : MonoBehaviour
     public float spead = 0.00005f;
 
     private Vector2 currentMoveTarget;
-    private BreadthFirstSearch searchPath; 
+    private static BreadthFirstSearch searchPath; 
     private Character character;
     private List<Vector2> currentPath;
     private int curNextPath = 1;
@@ -23,7 +23,8 @@ public class Bot : MonoBehaviour
     { 
         character = GetComponent<Character>();
         CircleMap circleMap = mapGeneration.GetComponent<CircleMap>();
-        searchPath = new BreadthFirstSearch(circleMap);
+        if (searchPath == null)
+            searchPath = new BreadthFirstSearch(circleMap);
         botDecision = GetComponent<BotDecision>();
     }
 

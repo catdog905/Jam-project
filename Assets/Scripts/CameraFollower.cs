@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class CameraFollower : MonoBehaviour
 {
+    private static System.Random rnd = new System.Random();
     void Start()
     {
         characters = new GameObject[enemiesToSpawn+1];
