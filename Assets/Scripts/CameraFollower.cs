@@ -59,6 +59,8 @@ public class CameraFollower : MonoBehaviour
 
     void Update()
     {
+        if (characters[0] != null)
+        Debug.Log(characters[0].gameObject.name);
         if (Input.GetKeyDown(KeyCode.R)){
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex,LoadSceneMode.Single);
         }
