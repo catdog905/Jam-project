@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraFollower : MonoBehaviour
 {
@@ -54,6 +55,9 @@ public class CameraFollower : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R)){
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex,LoadSceneMode.Single);
+        }
         if (whoToFollow != null)
             transform.position = new Vector3(whoToFollow.position.x,whoToFollow.position.y,transform.position.z);
         else if (!workingOnRespawn){

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class WinField : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -39,6 +39,7 @@ public class WinField : MonoBehaviour
             timer += Time.deltaTime;
             if (timer >= timeToWin){
                 text1.text=text2.text = "YOU WON";
+                SceneManager.LoadScene("Won",LoadSceneMode.Single);
                 text1=text2=null;
             }
             text1.text=text2.text = timer.ToString();
