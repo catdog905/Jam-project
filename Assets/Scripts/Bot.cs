@@ -13,6 +13,7 @@ public class Bot : MonoBehaviour
     private Character character;
     private List<Vector2> currentPath;
     private int curNextPath = 1;
+    private BotDecision botDecision;
 
     void Awake()
     {
@@ -23,12 +24,13 @@ public class Bot : MonoBehaviour
         character = GetComponent<Character>();
         CircleMap circleMap = mapGeneration.GetComponent<CircleMap>();
         searchPath = new BreadthFirstSearch(circleMap);
+        botDecision = GetComponent<BotDecision>();
     }
 
     void Update()
     {
-        
-        GoToTarget();
+        character.PlaceBombInDirection(botDecision.attackDirection);
+        //GoToTarget(botDecision.);
     }
     
     private float nextActionTime = 0.0f;
@@ -36,13 +38,12 @@ public class Bot : MonoBehaviour
     int ptr = 1;
     List<Vector2> path;
     float timeToDoNext = 0;
-    private void GoToTarget() {
-        Transform target = CameraFollower.singleton.whoToFollow;
+    private void GoToTarget(Vector2 target) {
         Vector2 currentPosition = transform.position;
         if (Time.time > timeToDoNext){
             ptr = 1;
             timeToDoNext = Time.time+period+Random.Range(0f,1f);
-            path = searchPath.GetShortestWay(currentPosition, target.position);
+            path = searchPath.GetShortestWay(currentPosition, target);
         }
         Vector2 goal;
         if (Mathf.Abs(transform.position.x-path[ptr].x)<0.1f&&Mathf.Abs(transform.position.y-path[ptr].y)<0.1f){
@@ -57,31 +58,6 @@ public class Bot : MonoBehaviour
 
         Vector2 dir = (goal - currentPosition);
         character.SetMovement(dir);
-        character.SetPlaceToLookAt(target.position);
-
-
-
-
-
-        return;
-         currentPosition = transform.position;
-        if (Time.time > nextActionTime) {
-            nextActionTime =  Time.time + period;
-            currentPath = searchPath.GetShortestWay(currentPosition, target.transform.position);
-            curNextPath = 1;
-        }
-        if (currentPath != null) {
-            Debug.Log(curNextPath + " " + currentPath.Count);
-            if (curNextPath >= currentPath.Count)
-                return;
-            if (Mathf.Abs(currentPath[curNextPath].x - currentPosition.x) <= 0.5 && Mathf.Abs(currentPath[curNextPath].y - currentPosition.y) <= 0.5)
-                curNextPath++;
-            var heading = currentPath[curNextPath] - currentPosition;
-            var distance = heading.magnitude;
-            var direction = heading / distance;
-            character.SetMovement(direction);
-        //character.SetPlaceToLookAt(new Vector2(path[0].x - currentPosition.x, path[1].y - currentPosition.y));
-        //
-        }
+        character.SetPlaceToLookAt(target);
     }
 }
