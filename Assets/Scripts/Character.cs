@@ -173,6 +173,7 @@ public class Character : MonoBehaviour
     {
         //PlaceBombInDirection(transform.right);
         // Transforming Vector2 into Vector3
+       // Bot.GetCurrentThreats(transform.position);
         Vector3 worldPosition = placeToLookAt;
         worldPosition.z = transform.position.z;
 

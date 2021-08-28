@@ -5,10 +5,15 @@ using UnityEngine;
 public class Meteorite : MonoBehaviour
 {
     // Start is called before the first frame update
+    void Awake(){
+        meteorites.Add(this);
+        colliderOfAOE.enabled=false;
+    }
     void Start()
     {
         
     }
+    public static List<Meteorite> meteorites = new List<Meteorite>();
     [SerializeField] CircleCollider2D colliderOfAOE;
     [SerializeField] GameObject bulletPrefab;
     public void OnTriggerEnter2D(Collider2D collider)
@@ -24,10 +29,6 @@ public class Meteorite : MonoBehaviour
     {
         Destroy(collider.gameObject);
     }
-    void Awake(){
-        colliderOfAOE.enabled=false;
-    }
-
     [SerializeField] SpriteRenderer spriteRenderer;
     IEnumerator timelyExplosion(){
         float timePassed = 0;
@@ -56,7 +57,7 @@ public class Meteorite : MonoBehaviour
         yield return null;
         }
     }
-    float radius,timeForExplosion;
+    public float radius,timeForExplosion;
     public void Initialize(float radius, float timeForExplosion){
         this.radius=radius;
         this.timeForExplosion=timeForExplosion;

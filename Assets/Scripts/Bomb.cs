@@ -18,14 +18,18 @@ public class Bomb : MonoBehaviour
     }
     void Awake()
     {
+        bombs.Add(this);
         rb = GetComponent<Rigidbody2D>();
     }
+    public static List<Bomb> bombs = new List<Bomb>();
     Vector2 rbVelocity = Vector2.zero;
     [SerializeField]
     private Transform[] raycasters;
+    public float radius;
     public void Initialize(float radius, float secondsToBlowUp, float speed, LayerMask layersToStopExplosion, int damage)
     {
         this.secondsToBlowUp = secondsToBlowUp;
+        this.radius=radius;
         colliderOfAOE.radius = radius;
         spriteOfAOE.gameObject.transform.localScale = new Vector3(radius * 2, radius * 2, 1);
         rbVelocity = transform.right * speed;
@@ -156,6 +160,7 @@ public class Bomb : MonoBehaviour
         yield return new WaitForSeconds(secondsToBlowUp);
         AreaOfEffectGoesOff();
         CameraFollower.singleton.explosionSound2.Play();
+        bombs.Remove(this);
         Destroy(gameObject);
     }
 
