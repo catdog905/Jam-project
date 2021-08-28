@@ -7,7 +7,7 @@ public class CameraFollower : MonoBehaviour
 {
     void Start()
     {
-        characters = new GameObject[enemiesToSpawn];
+        characters = new GameObject[enemiesToSpawn+1];
         for (int i = 0; i<enemiesToSpawn;++i){
             StartCoroutine(confirmSpawn(enemyPrefab));
         }
@@ -15,7 +15,7 @@ public class CameraFollower : MonoBehaviour
     void Awake(){
         singleton=this;
     }
-    private int ptr = 0;
+    private int ptr = 1;
     public AudioSource explosionSound1,explosionSound2;
     public static GameObject[] characters;
     [SerializeField] GameObject enemyPrefab;
@@ -27,17 +27,21 @@ public class CameraFollower : MonoBehaviour
     public Transform whoToFollow;
     bool workingOnRespawn = false;
     IEnumerator confirmSpawn(GameObject who, bool isPlayer = false){
-        if (isPlayer)
-        workingOnRespawn=true;
-        int lptr = ptr++;
+        int lptr;
+        if (isPlayer){
+            workingOnRespawn=true;
+            lptr = 0;
+        }   
+        else
+            lptr = ptr++;
         while (true){
             Vector3 coords = (Random.insideUnitCircle.normalized*1.1f+ new Vector2(1,1))/2;
             coords*=(CircleMap.singleton.mapSideLength-100);
             coords += new Vector3(100,100);
             Character character = Instantiate(who,coords,Quaternion.identity).GetComponent<Character>();
+            characters[lptr]=character.gameObject;
             if (!isPlayer){
-                characters[lptr]=character.gameObject;
-                    character.gameObject.GetComponent<Bot>().mapGeneration=CircleMap.singleton.gameObject;
+                character.gameObject.GetComponent<Bot>().mapGeneration=CircleMap.singleton.gameObject;
             }
             character.wallFather=wallFather;
             yield return new WaitForSeconds(0.5f);
