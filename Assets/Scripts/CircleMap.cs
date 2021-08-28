@@ -22,6 +22,7 @@ public class CircleMap : MonoBehaviour
 
     void Awake() {
         singleton=this;
+        mapSideLength+=100;
         for (int i = 0; i < mapSideLength+100; i++) {
             List<CellType> temp = new List<CellType>();
             for (int j = 0; j < mapSideLength+100; j++) {
@@ -29,7 +30,8 @@ public class CircleMap : MonoBehaviour
             }
             map2D.Add(temp);
         }
-        BoxesTree boxesTree = GenerateBinaryBoxesTree(new Box(new Vector2(0, 0), mapSideLength, mapSideLength));
+        
+        BoxesTree boxesTree = GenerateBinaryBoxesTree(new Box(new Vector2(100, 100), mapSideLength, mapSideLength));
         List<Box> allBoxLeafs = boxesTree.GetAllBoxLeafs();
         foreach (Box box in allBoxLeafs) {
             if (IsBoxInInscribedCircle(box)) {

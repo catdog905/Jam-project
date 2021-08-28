@@ -32,21 +32,26 @@ public class Bot : MonoBehaviour
     }
     
     private float nextActionTime = 0.0f;
-    public float period = 0.5f;
+    public float period = 1.5f;
+    int ptr = 1;
+    List<Vector2> path;
+    float timeToDoNext = 0;
     private void GoToTarget() {
         Transform target = CameraFollower.singleton.whoToFollow;
         Vector2 currentPosition = transform.position;
-        List<Vector2> path = searchPath.GetShortestWay(currentPosition, target.position);
+        if (Time.time > timeToDoNext){
+            ptr = 1;
+            timeToDoNext = Time.time+period+Random.Range(0f,1f);
+            path = searchPath.GetShortestWay(currentPosition, target.position);
+        }
         Vector2 goal;
-        Debug.Log(path[0]);
-        Debug.Log(path[1]);
-        //if (Mathf.Abs(path[0].x-path[1].x)<1f&&Mathf.Abs(path[0].y-path[1].y)<0.9f){
-        Debug.Log(true);
-            goal = path[2];
+        if (Mathf.Abs(transform.position.x-path[ptr].x)<0.1f&&Mathf.Abs(transform.position.y-path[ptr].y)<0.1f){
+            ptr++;
+        }
+            goal = path[ptr];
 
         //}
         //else{
-        Debug.Log(false);
          //   goal = path[1];
         //}
 

@@ -126,7 +126,7 @@ MonoBehaviour:
   distanceToEnemy: 10
   mapGeneration: {fileID: 0}
   spead: 0.00005
-  period: 0.5
+  period: 1.5
 --- !u!1 &7070924778634282832
 GameObject:
   m_ObjectHideFlags: 0
