@@ -9,8 +9,9 @@ public class CameraFollower : MonoBehaviour
     {
         characters = new GameObject[enemiesToSpawn+1];
         for (int i = 0; i<enemiesToSpawn;++i){
-            StartCoroutine(confirmSpawn(enemyPrefab));
+         //   StartCoroutine(confirmSpawn(enemyPrefab));
         }
+        StartCoroutine(BotAutoRespawner());
     }
     void Awake(){
         singleton=this;
@@ -25,8 +26,20 @@ public class CameraFollower : MonoBehaviour
     private GameObject wallFather,playerPrefab;
     [SerializeField]
     public Transform whoToFollow;
+
+    IEnumerator BotAutoRespawner(){
+        while (true){
+            for (int i = 1; i < characters.Length;++i){
+                if (characters[i] == null){
+                    yield return confirmSpawn(enemyPrefab,false,i);
+                }
+
+                yield return null;
+            }
+        }
+    }
     bool workingOnRespawn = false;
-    IEnumerator confirmSpawn(GameObject who, bool isPlayer = false){
+    IEnumerator confirmSpawn(GameObject who, bool isPlayer = false,int repsawnId = -1){
         int lptr;
         if (isPlayer){
             workingOnRespawn=true;
@@ -34,6 +47,9 @@ public class CameraFollower : MonoBehaviour
         }   
         else
             lptr = ptr++;
+        if (repsawnId != -1){
+            lptr = repsawnId;
+        }
         while (true){
             Vector3 coords = (Random.insideUnitCircle.normalized*1.1f+ new Vector2(1,1))/2;
             coords*=(CircleMap.singleton.mapSideLength-100);
