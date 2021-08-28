@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Meteorite : MonoBehaviour
 {
+    private static System.Random rnd = new System.Random();
     // Start is called before the first frame update
     void Awake(){
         meteorites.Add(this);
@@ -41,11 +42,8 @@ public class Meteorite : MonoBehaviour
             Vector3 bulPos = transform.position;
             bulPos.z=0;
             Vector3 rotEuler = new Vector3();
-            rotEuler.z=45;
-            for (int i = 0; i < 4;++i){
-                Instantiate(bulletPrefab,bulPos,Quaternion.Euler(rotEuler));
-                rotEuler.z+=90;
-            }
+            rotEuler.z=45 + 90 * rnd.Next(0, 3);
+            Instantiate(bulletPrefab,bulPos,Quaternion.Euler(rotEuler));
             Destroy(spriteRenderer);
             break;
         }

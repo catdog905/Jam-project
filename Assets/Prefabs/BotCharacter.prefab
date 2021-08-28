@@ -52,7 +52,7 @@ MonoBehaviour:
   wallFather: {fileID: 0}
   speed: 10
   anglularSpeed: 10
-  bombPlacingCooldown: 0.5
+  bombPlacingCooldown: 2
   expolsionRadius: 5
   cooldownBetweenWallCreation: 0.5
   secondsToBlowUp: 1

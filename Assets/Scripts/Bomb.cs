@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
+    private static System.Random rnd = new System.Random();
     private Rigidbody2D rb;
     List<GameObject> objectsToBlowUp = new List<GameObject>();
     [SerializeField] GameObject smoke;
