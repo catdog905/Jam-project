@@ -9,6 +9,7 @@ public class BotDecision : MonoBehaviour
     public Vector2 attackDirection;
     public Vector2 goTarget;
     public Vector2 buildDirection;
+    public bool isAttack = false;
 
     private Vector2 item;
     private bool isItemUp;
@@ -32,8 +33,11 @@ public class BotDecision : MonoBehaviour
             //InWhichBombRadius();
           //  goTarget = botPosition + GetDirectionVector(InWhichBombRadius(), botPosition());//todo
         //} 
-        if (enemies.Count != 0)
+        if (enemies.Count != 0){
+            isAttack = true;
             attackDirection = GetDirectionVector(transform.position, enemies[rnd.Next(0, enemies.Count - 1)].transform.position);
+        }else
+            isAttack = false;
     }
 
     Vector2 GetDirectionVector(Vector2 start, Vector2 stop) {
@@ -45,17 +49,19 @@ public class BotDecision : MonoBehaviour
     private List<GameObject> GetEnemiesNear() {
         List<GameObject> nearEnemies = new List<GameObject>();
         GameObject[] players = CameraFollower.characters;
+        Debug.Log(players.Length);
         foreach (GameObject player in players) {
-            if (player != transform.gameObject){
-                RaycastHit2D hit = Physics2D.Raycast(transform.position, GetDirectionVector(transform.position, player.transform.position));
-                if (hit.collider != null){
-                    if (hit.transform.gameObject == player)
-                        nearEnemies.Add(player);
+            if (player != transform.gameObject && player != null){
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, GetDirectionVector(transform.position, player.transform.position), GetDistanceBetweenVectors(transform.position, player.transform.position));
+                if (hit.collider == null){
+                    nearEnemies.Add(player);
                 }
             }
         }
         return nearEnemies;
     }
 
-    
+    private float GetDistanceBetweenVectors(Vector2 start, Vector2 stop){
+        return (start - stop).magnitude;
+    }
 }

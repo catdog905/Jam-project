@@ -29,7 +29,8 @@ public class Bot : MonoBehaviour
 
     void Update()
     {
-        character.PlaceBombInDirection(botDecision.attackDirection);
+        if (botDecision.isAttack)
+            character.PlaceBombInDirection(botDecision.attackDirection);
         //GoToTarget(botDecision.);
     }
     
@@ -38,6 +39,25 @@ public class Bot : MonoBehaviour
     int ptr = 1;
     List<Vector2> path;
     float timeToDoNext = 0;
+    private List<GameObject> GetCurrentThreats(){
+        Vector3 pos = transform.position;
+        List<GameObject> threats = new List<GameObject>();
+        foreach(Meteorite meteorite in Meteorite.meteorites){
+            float xDif = meteorite.transform.position.x-pos.x;
+            float yDif = meteorite.transform.position.y-pos.y;
+            if (yDif*yDif + xDif*xDif <= meteorite.radius){
+                threats.Add(meteorite.gameObject);
+            }
+        }
+        foreach(Bomb bomb in Bomb.bombs){
+            float xDif = bomb.transform.position.x-pos.x;
+            float yDif = bomb.transform.position.y-pos.y;
+            if (yDif*yDif + xDif*xDif <= bomb.radius){
+                threats.Add(bomb.gameObject);
+            }
+        }
+        return threats;
+    }
     private void GoToTarget(Vector2 target) {
         Vector2 currentPosition = transform.position;
         if (Time.time > timeToDoNext){
