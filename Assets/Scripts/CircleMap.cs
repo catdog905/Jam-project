@@ -20,6 +20,7 @@ public class CircleMap : MonoBehaviour
         NotDestroyedWall
     }
 
+    public List<Box> allBoxLeafs;
     void Awake() {
         singleton=this;
         mapSideLength+=100;
@@ -32,7 +33,7 @@ public class CircleMap : MonoBehaviour
         }
         
         BoxesTree boxesTree = GenerateBinaryBoxesTree(new Box(new Vector2(100, 100), mapSideLength, mapSideLength));
-        List<Box> allBoxLeafs = boxesTree.GetAllBoxLeafs();
+        allBoxLeafs = boxesTree.GetAllBoxLeafs();
         foreach (Box box in allBoxLeafs) {
             if (IsBoxInInscribedCircle(box)) {
                 box.DrawBoxFrame(destroyedWall, notDestroyedWall, map2D);
@@ -72,7 +73,7 @@ public class CircleMap : MonoBehaviour
         }
     }
 
-    private class Box{
+    public class Box{
         public Vector2 leftTopPos, center;
         public int width, height;
 

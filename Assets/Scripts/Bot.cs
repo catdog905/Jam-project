@@ -29,6 +29,7 @@ public class Bot : MonoBehaviour
 
     void Update()
     {
+//        Debug.Log(botDecision);
         if (botDecision.isAttack)
             character.PlaceBombInDirection(botDecision.attackDirection);
         GoToTarget(botDecision.goTarget);

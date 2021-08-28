@@ -6,11 +6,12 @@ using System;
 
 public class BreadthFirstSearch 
 {
-    private List<List<List<Vector2>>> graph = new List<List<List<Vector2>>>();
+    private static List<List<List<Vector2>>> graph;// = new List<List<List<Vector2>>>();
 
 
     public BreadthFirstSearch(CircleMap map) {
-        graph = CreateGraph(map);
+        if (graph == null)
+            graph = CreateGraph(map);
     }
     Vector2 start,stop;
     public void OrderAWay(Vector2 start,Vector2 stop){

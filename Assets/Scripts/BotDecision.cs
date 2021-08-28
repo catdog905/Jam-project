@@ -55,7 +55,7 @@ public class BotDecision : MonoBehaviour
     private List<GameObject> GetEnemiesNear() {
         List<GameObject> nearEnemies = new List<GameObject>();
         GameObject[] players = CameraFollower.characters;
-        Debug.Log(players.Length);
+      //  Debug.Log(players.Length);
         foreach (GameObject player in players) {
             if (player != transform.gameObject && player != null){
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, GetDirectionVector(transform.position, player.transform.position), GetDistanceBetweenVectors(transform.position, player.transform.position), layersToStopExplosion);
@@ -74,6 +74,8 @@ public class BotDecision : MonoBehaviour
     private List<GameObject> GetCurrentThreatsOnPos(Vector2 pos){
         List<GameObject> threats = new List<GameObject>();
         foreach(Meteorite meteorite in Meteorite.meteorites){
+            if (meteorite == null)
+                continue;
             float xDif = meteorite.transform.position.x-pos.x;
             float yDif = meteorite.transform.position.y-pos.y;
             if (yDif*yDif + xDif*xDif <= meteorite.radius){
@@ -81,6 +83,8 @@ public class BotDecision : MonoBehaviour
             }
         }
         foreach(Bomb bomb in Bomb.bombs){
+            if (bomb == null)
+                continue;
             if (bomb.rbVelocity != Vector2.zero) {
                 float xDif = bomb.transform.position.x-pos.x;
                 float yDif = bomb.transform.position.y-pos.y;

@@ -8,9 +8,6 @@ public class CameraFollower : MonoBehaviour
     void Start()
     {
         characters = new GameObject[enemiesToSpawn+1];
-        for (int i = 0; i<enemiesToSpawn;++i){
-         //   StartCoroutine(confirmSpawn(enemyPrefab));
-        }
         StartCoroutine(BotAutoRespawner());
     }
     void Awake(){
@@ -28,10 +25,22 @@ public class CameraFollower : MonoBehaviour
     public Transform whoToFollow;
 
     IEnumerator BotAutoRespawner(){
+
         while (true){
             for (int i = 1; i < characters.Length;++i){
                 if (characters[i] == null){
-                    yield return confirmSpawn(enemyPrefab,false,i);
+                    int randRoom = Random.Range(0,CircleMap.singleton.allBoxLeafs.Count);
+            Vector3 coords = (Random.insideUnitCircle.normalized*1.1f+ new Vector2(1,1))/2;
+            coords*=(CircleMap.singleton.mapSideLength-100);
+            coords += new Vector3(100,100);
+                   // Debug.Log(CircleMap.singleton.allBoxLeafs[randRoom].leftTopPos);
+                 //   Debug.Log(coords);
+                    Character character = Instantiate(enemyPrefab,coords,Quaternion.identity).GetComponent<Character>();
+                    characters[i]=character.gameObject;
+                    character.wallFather=wallFather;
+                    character.gameObject.GetComponent<Bot>().mapGeneration=CircleMap.singleton.gameObject;
+
+                    //yield return confirmSpawn(enemyPrefab,false,i);
                 }
 
                 yield return null;
