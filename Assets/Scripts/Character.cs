@@ -62,7 +62,7 @@ public class Character : MonoBehaviour
         if (isBombOnCooldown)
             return;
         StartCoroutine(ManageBombCooldown());
-        Instantiate(bombPrefab, transform.position, transform.rotation).GetComponent<Bomb>().Initialize(expolsionRadius,secondsToBlowUp, bombSpeed,layersToStopExplosion,bombDamage);
+        Instantiate(bombPrefab, transform.position, transform.rotation).GetComponent<Bomb>().Initialize(expolsionRadius,secondsToBlowUp, bombSpeed,layersToStopExplosion,bombDamage,this);
     }
 
     public void SetMovement(Vector2 dir)
@@ -123,7 +123,7 @@ public class Character : MonoBehaviour
         if (dir.y > 0)
             dop = 180;
         Quaternion rot =  Quaternion.Euler(0, 0, dop - Mathf.Atan(dir.x / dir.y) * Mathf.Rad2Deg - 90);
-        Instantiate(bombPrefab, transform.position, rot).GetComponent<Bomb>().Initialize(expolsionRadius,secondsToBlowUp, bombSpeed,layersToStopExplosion,bombDamage);
+        Instantiate(bombPrefab, transform.position, rot).GetComponent<Bomb>().Initialize(expolsionRadius,secondsToBlowUp, bombSpeed,layersToStopExplosion,bombDamage,this);
     }
 
     public void PlaceWall(){

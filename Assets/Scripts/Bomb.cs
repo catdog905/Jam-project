@@ -26,8 +26,25 @@ public class Bomb : MonoBehaviour
     [SerializeField]
     private Transform[] raycasters;
     public float radius;
-    public void Initialize(float radius, float secondsToBlowUp, float speed, LayerMask layersToStopExplosion, int damage)
+    bool unignored = false;
+    void Unignore(){
+        if (unignored)
+            return;
+        unignored=true;
+        Physics2D.IgnoreCollision(colliderOfAOE,father.gameObject.GetComponent<Collider2D>(),false);
+    }
+    IEnumerator AutoIgnore(Collider2D one, Collider2D second){
+        Physics2D.IgnoreCollision(one,second);
+
+
+        yield return new WaitForSeconds(0.2f);
+        Unignore();
+    }
+    Character father;
+    public void Initialize(float radius, float secondsToBlowUp, float speed, LayerMask layersToStopExplosion, int damage, Character father)
     {
+        this.father=father;
+        StartCoroutine(AutoIgnore(colliderOfAOE,father.gameObject.GetComponent<Collider2D>()));
         this.secondsToBlowUp = secondsToBlowUp;
         this.radius=radius;
         colliderOfAOE.radius = radius;
@@ -73,6 +90,17 @@ public class Bomb : MonoBehaviour
                     coroutineStarted=true;
                     rbVelocity = Vector2.zero;
                 }
+            }
+        }else if (collider.gameObject.tag == "Character"){
+            const float radiusOfWall = 1.3f;
+            Vector3 wallPosition = collider.gameObject.transform.position;
+            if (transform.position.x >= wallPosition.x - radiusOfWall &&
+            transform.position.y >= wallPosition.y - radiusOfWall &&
+            transform.position.x <= wallPosition.x + radiusOfWall &&
+            transform.position.y <= wallPosition.y + radiusOfWall)
+            {
+                // We touched the character, we blow up
+                    StartCoroutine(blowUp(true));
             }
         }
     }
@@ -171,11 +199,16 @@ public class Bomb : MonoBehaviour
     }
 
 
-    public IEnumerator blowUp()
+    public IEnumerator blowUp(bool skip = false)
     {
         BombRotation br = GetComponentInChildren<BombRotation>();
         br.enabled=false;
-        yield return new WaitForSeconds(secondsToBlowUp);
+        Unignore();
+        yield return new WaitForFixedUpdate();
+        yield return new WaitForFixedUpdate();
+        yield return new WaitForFixedUpdate();
+        if (!skip)
+            yield return new WaitForSeconds(secondsToBlowUp);
         AreaOfEffectGoesOff();
         CameraFollower.singleton.explosionSound2.Play();
         bombs.Remove(this);
