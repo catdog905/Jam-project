@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
+    private static System.Random rnd = new System.Random();
     private Rigidbody2D rb;
     List<GameObject> objectsToBlowUp = new List<GameObject>();
+    [SerializeField] GameObject smoke;
+    [SerializeField] GameObject explosionPrefab;
     public void OnTriggerEnter2D(Collider2D collider)
     {
         if (!colliderOfAOE.enabled)
@@ -198,9 +201,13 @@ public class Bomb : MonoBehaviour
         //TODO explosion animation
     }
 
-
+    IEnumerator killAnim(Animator anim){
+            yield return new WaitForSeconds(1f);
+            Destroy(anim.gameObject);
+    }
     public IEnumerator blowUp(bool skip = false)
     {
+        smoke.SetActive(false);
         BombRotation br = GetComponentInChildren<BombRotation>();
         br.enabled=false;
         Unignore();
@@ -209,6 +216,8 @@ public class Bomb : MonoBehaviour
         yield return new WaitForFixedUpdate();
         if (!skip)
             yield return new WaitForSeconds(secondsToBlowUp);
+        Animator anim = Instantiate(explosionPrefab,transform.position,Quaternion.identity).GetComponentInChildren<Animator>();
+        CameraFollower.singleton.StartCoroutine(killAnim(anim));
         AreaOfEffectGoesOff();
         CameraFollower.singleton.explosionSound2.Play();
         bombs.Remove(this);
