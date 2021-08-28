@@ -59,10 +59,17 @@ public class Bot : MonoBehaviour
         Transform target = CameraFollower.singleton.whoToFollow;
         Vector2 currentPosition = transform.position;
         if (Time.time > timeToDoNext){
-            ptr = 1;
             timeToDoNext = Time.time+period+Random.Range(0f,1f);
-            path = searchPath.GetShortestWay(currentPosition, target.position);
+            searchPath.OrderAWay(currentPosition,target.position);
+           // path = searchPath.GetShortestWay(currentPosition, target.position);
         }
+        List<Vector2> newPath = searchPath.takeAWay();
+        if (newPath != null){
+            path=newPath;
+            ptr = 1;
+        }
+        if (path == null)
+            return;
         Vector2 goal;
         if (Mathf.Abs(transform.position.x-path[ptr].x)<0.1f&&Mathf.Abs(transform.position.y-path[ptr].y)<0.1f){
             ptr++;
@@ -82,7 +89,7 @@ public class Bot : MonoBehaviour
 
 
 
-        return;
+        /*return;
          currentPosition = transform.position;
         if (Time.time > nextActionTime) {
             nextActionTime =  Time.time + period;
@@ -102,5 +109,6 @@ public class Bot : MonoBehaviour
         //character.SetPlaceToLookAt(new Vector2(path[0].x - currentPosition.x, path[1].y - currentPosition.y));
         //
         }
+        */
     }
 }

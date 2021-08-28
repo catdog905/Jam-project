@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
 using System;
 
 public class BreadthFirstSearch 
@@ -11,8 +12,26 @@ public class BreadthFirstSearch
     public BreadthFirstSearch(CircleMap map) {
         graph = CreateGraph(map);
     }
+    Vector2 start,stop;
+    public void OrderAWay(Vector2 start,Vector2 stop){
+        this.start=start;
+        this.stop=stop;
+    // Create a thread and call a background method   
+        Thread backgroundThread = new Thread(new ThreadStart(GetShortestWay));  
+    // Start thread  
+        backgroundThread.Start();  
 
-    public List<Vector2> GetShortestWay(Vector2 start, Vector2 stop) {
+    } 
+    List<Vector2> readyWay = null;
+    public List<Vector2> takeAWay(){
+        if (readyWay == null)
+            return null;
+        List<Vector2> way = readyWay;
+        readyWay=null;
+        return way;
+    }
+
+    private void GetShortestWay() {
         Queue<Vector2> q = new Queue<Vector2>();
         q.Enqueue(start);
         List<List<bool>> used = Create2DList(graph.Count, graph[0].Count, false);
@@ -51,7 +70,8 @@ public class BreadthFirstSearch
                             cnt++;
          throw new Exception("There are no any path form start ot stop " + start + " " + stop + "To array of start point: " + graph[(int)start.x][(int)stop.y].Count + "Count pathes to stop " + cnt);
         */
-            return null;
+            readyWay=null;
+            return;
         }
         for (Vector2 v = stop; v.x != -1 || v.y != -1; v = p[(int)v.x][(int)v.y]){
             path.Add(v);
@@ -62,7 +82,7 @@ public class BreadthFirstSearch
             str = str + v;
         Debug.Log(str); 
         /*Debug.Log(path[0].x + " " + path[0].y + " " +  path[1].x + " " + path[1].y);
-        */return path;
+        */readyWay=path;
 
     }
 
