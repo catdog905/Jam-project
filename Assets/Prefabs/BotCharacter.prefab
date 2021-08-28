@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5104365689392042890}
   m_Layer: 0
   m_Name: BotCharacter
-  m_TagString: Untagged
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -61,7 +61,7 @@ MonoBehaviour:
   wallCreatorPrefab: {fileID: 0}
   layersToStopExplosion:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 640
   hp: 1
   bombDamage: 10
   spawnedWallDistance: 2
