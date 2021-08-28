@@ -15,8 +15,27 @@ public class WinField : MonoBehaviour
     string textSaved = "";
     [SerializeField]
     private Text text1,text2;
+    bool countin = false;
     void OnTriggerStay2D(Collider2D collider){
+    }
+
+    void OnTriggerEnter2D(Collider2D collider){
         if(collider.gameObject.name.StartsWith("PlayerCharacter")){
+            timer = 0f;
+            countin=true;
+            textSaved = text1.text;
+        }
+    }
+    void OnTriggerExit2D(Collider2D collider){
+        if(collider.gameObject.name.StartsWith("PlayerCharacter")){
+            text1.text=text2.text=textSaved;
+            countin=false;
+        }
+    }
+    // Update is called once per frame
+    void Update()
+    {
+        if (countin){
             timer += Time.deltaTime;
             if (timer >= timeToWin){
                 text1.text=text2.text = "YOU WON";
@@ -24,22 +43,5 @@ public class WinField : MonoBehaviour
             }
             text1.text=text2.text = timer.ToString();
         }
-    }
-
-    void OnTriggerEnter2D(Collider2D collider){
-        if(collider.gameObject.name.StartsWith("PlayerCharacter")){
-            timer = 0f;
-            textSaved = text1.text;
-        }
-    }
-    void OnTriggerExit2D(Collider2D collider){
-        if(collider.gameObject.name.StartsWith("PlayerCharacter")){
-            text1.text=text2.text=textSaved;
-        }
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
