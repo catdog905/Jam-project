@@ -15,6 +15,8 @@ public class BotDecision : MonoBehaviour
     private bool isItemUp;
     private Vector2 botPositoin;
     private Character character;
+    [SerializeField]
+    private LayerMask layersToStopExplosion;
 
     // Start is called before the first frame update
     void Start()
@@ -52,7 +54,7 @@ public class BotDecision : MonoBehaviour
         Debug.Log(players.Length);
         foreach (GameObject player in players) {
             if (player != transform.gameObject && player != null){
-                RaycastHit2D hit = Physics2D.Raycast(transform.position, GetDirectionVector(transform.position, player.transform.position), GetDistanceBetweenVectors(transform.position, player.transform.position));
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, GetDirectionVector(transform.position, player.transform.position), GetDistanceBetweenVectors(transform.position, player.transform.position), layersToStopExplosion);
                 if (hit.collider == null){
                     nearEnemies.Add(player);
                 }

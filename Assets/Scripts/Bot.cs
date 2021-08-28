@@ -61,10 +61,17 @@ public class Bot : MonoBehaviour
     private void GoToTarget(Vector2 target) {
         Vector2 currentPosition = transform.position;
         if (Time.time > timeToDoNext){
-            ptr = 1;
             timeToDoNext = Time.time+period+Random.Range(0f,1f);
-            path = searchPath.GetShortestWay(currentPosition, target);
+            searchPath.OrderAWay(currentPosition,target);
+           // path = searchPath.GetShortestWay(currentPosition, target.position);
         }
+        List<Vector2> newPath = searchPath.takeAWay();
+        if (newPath != null){
+            path=newPath;
+            ptr = 1;
+        }
+        if (path == null)
+            return;
         Vector2 goal;
         if (Mathf.Abs(transform.position.x-path[ptr].x)<0.1f&&Mathf.Abs(transform.position.y-path[ptr].y)<0.1f){
             ptr++;

@@ -143,6 +143,10 @@ MonoBehaviour:
   attackDirection: {x: 0, y: 0}
   goTarget: {x: 0, y: 0}
   buildDirection: {x: 0, y: 0}
+  isAttack: 0
+  layersToStopExplosion:
+    serializedVersion: 2
+    m_Bits: 640
 --- !u!1 &7070924778634282832
 GameObject:
   m_ObjectHideFlags: 0
