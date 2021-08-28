@@ -18,7 +18,7 @@ public class Meteorite : MonoBehaviour
     [SerializeField] GameObject bulletPrefab;
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.name == "WinField"){
+        if (collider.gameObject.name == "WinField" || collider.gameObject.name.StartsWith("Ultra")){
             Physics2D.IgnoreCollision(collider,colliderOfAOE);
             return;
           //  GetComponent<Rigidbody2D>().

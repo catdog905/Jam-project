@@ -55,6 +55,24 @@ public class Bomb : MonoBehaviour
                 StartCoroutine(blowUp());
                 coroutineStarted=true;
                 rbVelocity = Vector2.zero;
+            }else if (collider.gameObject.name.StartsWith("Ultra")){
+                bool blowUps = false;
+                const float distToBlow = 1.3f;
+                if (collider.gameObject.name.EndsWith("D")){
+                    blowUps = Mathf.Abs(transform.position.y- collider.transform.position.y)<distToBlow;
+                }else if (collider.gameObject.name.EndsWith("R")){
+                    blowUps = Mathf.Abs(transform.position.x - collider.transform.position.x)<distToBlow;
+                }else if (collider.gameObject.name.EndsWith("L")){
+                    blowUps = Mathf.Abs(transform.position.x - collider.transform.position.x)<distToBlow;
+                }else{
+                    blowUps = Mathf.Abs(transform.position.y -collider.transform.position.y)<distToBlow;
+                }
+
+                if (blowUps){
+                    StartCoroutine(blowUp());
+                    coroutineStarted=true;
+                    rbVelocity = Vector2.zero;
+                }
             }
         }
     }
