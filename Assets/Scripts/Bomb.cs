@@ -22,7 +22,7 @@ public class Bomb : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
     public static List<Bomb> bombs = new List<Bomb>();
-    Vector2 rbVelocity = Vector2.zero;
+    public Vector2 rbVelocity = Vector2.zero;
     [SerializeField]
     private Transform[] raycasters;
     public float radius;
