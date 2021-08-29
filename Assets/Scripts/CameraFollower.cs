@@ -52,6 +52,7 @@ public class CameraFollower : MonoBehaviour
             }
         }
     }
+
     bool workingOnRespawn = false;
     IEnumerator confirmSpawn(GameObject who, bool isPlayer = false,int repsawnId = -1){
         int lptr;

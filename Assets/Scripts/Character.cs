@@ -148,7 +148,7 @@ public class Character : MonoBehaviour
             coordsToBuildWallsAt.Add(coords+opos2);
         }
         foreach(var vec in coordsToBuildWallsAt){
-            StartCoroutine(spawnWall(vec));
+            CameraFollower.singleton.StartCoroutine(spawnWall(vec));
         }
     }
     IEnumerator spawnWall(Vector3 vector3){
