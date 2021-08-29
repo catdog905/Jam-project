@@ -19,7 +19,7 @@ public class BreadthFirstSearch
         this.stop=stop;
     // Create a thread and call a background method   
       //  Thread backgroundThread = new Thread(new ThreadStart(GetShortestWay));
-      GetShortestWay();  
+     CameraFollower.singleton.StartCoroutine(GetShortestWay());  
     // Start thread  
        // backgroundThread.Start();  
 
@@ -33,7 +33,7 @@ public class BreadthFirstSearch
         return way;
     }
 
-    private void GetShortestWay() {
+    private IEnumerator GetShortestWay() {
         Queue<Vector2> q = new Queue<Vector2>();
         q.Enqueue(start);
         List<List<bool>> used = Create2DList(graph.Count, graph[0].Count, false);
@@ -44,6 +44,7 @@ public class BreadthFirstSearch
         
 
         bool endFlag = false;
+        int cycler = 0;
         while (q.Count != 0 && !endFlag) {
             Vector2 v = q.Dequeue();
             for (int i = 0; i < graph[(int)v.x][(int)v.y].Count; i++) {
@@ -60,8 +61,12 @@ public class BreadthFirstSearch
 
                 }
             }
+            if (cycler % 500 == 0)
+                yield return new WaitForEndOfFrame();
+            cycler++;
         }
-        Debug.Log(graph[(int)stop.x][(int)stop.y].Count);
+        yield return null;
+        //Debug.Log(cycler);
         List<Vector2> path = new List<Vector2>();
         if (!used[(int)stop.x][(int)stop.y]){
           /*  int cnt = 0;
@@ -73,8 +78,7 @@ public class BreadthFirstSearch
          throw new Exception("There are no any path form start ot stop " + start + " " + stop + "To array of start point: " + graph[(int)start.x][(int)stop.y].Count + "Count pathes to stop " + cnt);
         */
             readyWay=null;
-            return;
-        }
+        }else{
         for (Vector2 v = stop; v.x != -1 || v.y != -1; v = p[(int)v.x][(int)v.y]){
             path.Add(v);
         }
@@ -85,7 +89,7 @@ public class BreadthFirstSearch
         Debug.Log(str); 
         /*Debug.Log(path[0].x + " " + path[0].y + " " +  path[1].x + " " + path[1].y);
         */readyWay=path;
-
+        }
     }
 
     private List<List<List<Vector2>>> CreateGraph(CircleMap circleMap) {
