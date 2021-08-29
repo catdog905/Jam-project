@@ -41,8 +41,10 @@ public class WinField : MonoBehaviour
                 text1.text=text2.text = "YOU WON";
                 SceneManager.LoadScene("Won",LoadSceneMode.Single);
                 text1=text2=null;
+                return;
             }
-            text1.text=text2.text = timer.ToString();
+            if (text1 != null)
+                text1.text=text2.text = timer.ToString();
         }
     }
 }

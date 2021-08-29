@@ -18,9 +18,10 @@ public class BreadthFirstSearch
         this.start=start;
         this.stop=stop;
     // Create a thread and call a background method   
-        Thread backgroundThread = new Thread(new ThreadStart(GetShortestWay));  
+      //  Thread backgroundThread = new Thread(new ThreadStart(GetShortestWay));
+      GetShortestWay();  
     // Start thread  
-        backgroundThread.Start();  
+       // backgroundThread.Start();  
 
     } 
     List<Vector2> readyWay = null;

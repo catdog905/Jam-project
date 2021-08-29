@@ -235,6 +235,7 @@ GameObject:
   - component: {fileID: 277946361}
   - component: {fileID: 277946363}
   - component: {fileID: 277946362}
+  - component: {fileID: 277946364}
   m_Layer: 5
   m_Name: Game Name
   m_TagString: Untagged
@@ -294,10 +295,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Survive while the space station breaks apart, and random reality breaking
-    portals appear: THE GAME
-
-'
+  m_Text: Space station under attack
 --- !u!222 &277946363
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -306,6 +304,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 277946360}
   m_CullTransparentMesh: 1
+--- !u!114 &277946364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277946360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b046ad70111e72396ab0661b6d702a8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &980800403
 GameObject:
   m_ObjectHideFlags: 0
