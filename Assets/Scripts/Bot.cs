@@ -52,7 +52,14 @@ public class Bot : MonoBehaviour
         List<Vector2> newPath = searchPath.takeAWay();
         if (newPath != null){
             path=newPath;
-            ptr = 1;
+            float minLen = 9999;
+            for (int i = 1 ; i < Mathf.Min(path.Count,10);++i){
+                float mag = ((Vector2)transform.position - path[i]).magnitude;
+                if (mag < minLen){
+                    minLen=mag;
+                    ptr = i+1;
+                }
+            }
         }
         if (path == null)
             return;
