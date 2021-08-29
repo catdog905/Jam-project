@@ -29,10 +29,15 @@ public class CameraFollower : MonoBehaviour
         while (true){
             for (int i = 1; i < characters.Length;++i){
                 if (characters[i] == null){
+                    Vector2 coords;
                     int randRoom = Random.Range(0,CircleMap.singleton.allBoxLeafs.Count);
-            Vector3 coords = (Random.insideUnitCircle.normalized*1.1f+ new Vector2(1,1))/2;
-            coords*=(CircleMap.singleton.mapSideLength-100);
-            coords += new Vector3(100,100);
+                    //if (CircleMap.singleton.allBoxLeafs.Count == 0){
+            //coords = (Random.insideUnitCircle.normalized*1.1f+ new Vector2(1,1))/2;
+           // coords*=(CircleMap.singleton.mapSideLength-100);
+            //coords += new Vector2(100,100);
+                    //} else {
+                        coords = CircleMap.singleton.allBoxLeafs[randRoom].center/4 + new Vector2(100, 100);
+                    //}
                    // Debug.Log(CircleMap.singleton.allBoxLeafs[randRoom].leftTopPos);
                  //   Debug.Log(coords);
                     Character character = Instantiate(enemyPrefab,coords,Quaternion.identity).GetComponent<Character>();

@@ -127,6 +127,9 @@ MonoBehaviour:
   distanceToEnemy: 10
   mapGeneration: {fileID: 0}
   spead: 0.00005
+  layerToWall:
+    serializedVersion: 2
+    m_Bits: 128
   period: 1.5
 --- !u!114 &5104365689392042890
 MonoBehaviour:
@@ -140,7 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddf0866dd767c6515a9a9fc4f580de35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  standartTarget: {fileID: 5647555452464088867, guid: 6df66932271befe228fc267270b70993, type: 3}
+  standartTarget: {x: 150, y: 150}
   attackDirection: {x: 0, y: 0}
   goTarget: {x: 0, y: 0}
   buildDirection: {x: 0, y: 0}

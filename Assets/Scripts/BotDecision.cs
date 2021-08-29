@@ -6,7 +6,7 @@ public class BotDecision : MonoBehaviour
 {
     private static System.Random rnd = new System.Random();
 
-    public GameObject standartTarget;
+    public Vector2 standartTarget = new Vector2(150, 150);
     public Vector2 attackDirection;
     public Vector2 goTarget;
     public Vector2 buildDirection;
@@ -31,14 +31,14 @@ public class BotDecision : MonoBehaviour
         //get isItemUp
         //get item vector2
         //goTarget = item;
-        goTarget = standartTarget.transform.position;
+        goTarget = standartTarget;
         List<GameObject> enemies = GetEnemiesNear();
-        if (GetCurrentThreatsOnPos(transform.position).Count == 0){
-            goTarget = FindSafePlace();
-        } 
+        //if (GetCurrentThreatsOnPos(transform.position).Count == 0){
+        //    goTarget = FindSafePlace();
+        //} 
         List<GameObject> threats  = GetCurrentThreatsOnPos(transform.position);
         if (threats.Count != 0)
-            goTarget = FindSafePlace();
+            goTarget = transform.position + (transform.position- threats[0].transform.position) * 10;
         if (enemies.Count != 0){
             isAttack = true;
             attackDirection = GetDirectionVector(transform.position, enemies[rnd.Next(0, enemies.Count - 1)].transform.position);

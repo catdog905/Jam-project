@@ -20,7 +20,7 @@ public class CircleMap : MonoBehaviour
         NotDestroyedWall
     }
 
-    public List<Box> allBoxLeafs;
+    public List<Box> allBoxLeafs = new List<Box>();
     void Awake() {
         singleton=this;
         mapSideLength+=100;
