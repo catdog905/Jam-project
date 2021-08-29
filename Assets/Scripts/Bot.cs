@@ -14,6 +14,8 @@ public class Bot : MonoBehaviour
     private List<Vector2> currentPath;
     private int curNextPath = 1;
     private BotDecision botDecision;
+    [SerializeField]
+    private LayerMask layerToWall;
 
     void Awake()
     {
@@ -64,8 +66,11 @@ public class Bot : MonoBehaviour
         //else{
          //   goal = path[1];
         //}
-
+        
         Vector2 dir = (goal - currentPosition);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, 20, layerToWall);
+        if (hit.collider != null)
+            character.PlaceBombInDirection(dir);
         character.SetMovement(dir);
         character.SetPlaceToLookAt(target);
     }
